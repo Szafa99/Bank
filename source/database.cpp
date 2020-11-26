@@ -24,6 +24,7 @@ Data_base::Data_base(QString hostname,QString Username,QString Password,QString 
 Data_base::~Data_base()
 {
     clientdb.close();
+    qDebug()<<"closing database";
 }
 
 

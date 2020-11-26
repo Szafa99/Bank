@@ -4,8 +4,8 @@
 Login::Login(QObject *parent):
     QObject(parent),
     client_db(new Data_base("localhost","root","","bank_clients","QMYSQL") ),
-    pin("1234"),
-    username("kowalski@gmail.com")
+    pin("pin"),
+    username("email")
 {
 
 

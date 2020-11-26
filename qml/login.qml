@@ -204,6 +204,7 @@ Window {
                     id:logintxt
                     readOnly: false
                     anchors.fill: parent
+                    color:"darkgrey"
                     clip: true
                     text: if(!loginrect.loginmodified) log.getusername()
 
