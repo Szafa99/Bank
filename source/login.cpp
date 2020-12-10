@@ -1,15 +1,18 @@
 #include <headers/login.h>
 
 
-Login::Login(QObject *parent):
+Login::Login(Session *msession,QObject *parent):
     QObject(parent),
+    clientid(""),
+    startsession(msession),
     client_db(new Data_base("localhost","root","","bank_clients","QMYSQL") ),
     pin("pin"),
-    username("email")
+    username("martinszafarczyk@gmail.com")
 {
-
-
 }
+
+
+
 
 Login::~Login()
 {
@@ -20,7 +23,7 @@ Login::~Login()
 bool Login::setpin(const QString &mpin)
 {    
 
-    if(pin.length()==4)
+    if(mpin.length()==4)
     {
         pin=mpin;
         emit pinChanged();
@@ -61,7 +64,13 @@ bool Login::setusername(const QString &musername){
 bool Login::loguserin(const QString &mpin,const QString &musername)
 {
     qDebug()<<"username:"<<musername<<" pin :"<<mpin;
-    if(setusername(musername) && setpin(mpin) && client_db->validet_user(musername,mpin)){
+    if(setusername(musername) && setpin(mpin) && client_db->validet_user(musername,mpin,clientid)){
+        startsession->db=client_db;
+        startsession->client_id=clientid;
+        startsession->transfers=client_db->set_clients_transfers(clientid);
+
+
+
         return true;
     }
 

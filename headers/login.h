@@ -2,7 +2,9 @@
 #define LOGIN_H
 #include <QObject>
 #include <headers/database.h>
-
+#include <headers/session.h>
+#include<QQmlApplicationEngine>
+#include <QQmlContext>
 class Login:public QObject{
 
     Q_OBJECT
@@ -14,7 +16,7 @@ class Login:public QObject{
 
 
 public:
-    explicit Login(QObject *parent = nullptr);
+    explicit Login(Session *session=nullptr,QObject *parent = nullptr);
       ~Login();
 public:
     Q_INVOKABLE bool loguserin(const QString &pin,const QString &username);
@@ -30,10 +32,13 @@ signals:
     void usernameChanged();
     void pinChanged();
 private:
- Data_base *client_db;
+    QString clientid;
+    Session *startsession;
+    Data_base *client_db;
     QString pin;
     QString username;
     QString loginerror;
+
 
 
 };

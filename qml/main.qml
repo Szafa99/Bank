@@ -8,7 +8,7 @@ Window{
      Loader{
          id:mainpage
          anchors.fill: parent
-         source: "qrc:/qml/login.qml"
+         source: "qrc:/qml/mainwindow.qml"
 
      }
 

@@ -19,11 +19,11 @@ Window {
 
 
 
-    function startsession(){
-        var component = Qt.createComponent("qrc:/example.qml")
-                    var window = component.createObject(root)
-                    window.show()
-    }
+//    function startsession(){
+//        var component = Qt.createComponent("qrc:/example.qml")
+//                    var window = component.createObject(root)
+//                    window.show()
+//    }
 
     Connections{
         target: logintxt

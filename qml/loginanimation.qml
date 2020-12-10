@@ -13,7 +13,7 @@ Window {
 
     Connections{
     target: logoanim
-    onFinished:{mainpage.source="qrc:/qml/mainwindow.qml";console.log("hi")}
+    onFinished:mainpage.source="qrc:/qml/mainwindow.qml";
     }
 
     SequentialAnimation{
