@@ -16,11 +16,11 @@ int main(int argc, char *argv[])
 
 
     QQmlApplicationEngine engine;
-    Session session;
-    Login log(&session);
+//    Session session;
+//    Login log(&session);
 
-    engine.rootContext()->setContextProperty("log",&log);
-    engine.rootContext()->setContextProperty("session",&session);
+//    engine.rootContext()->setContextProperty("log",&log);
+//    engine.rootContext()->setContextProperty("session",&session);
 
 
     const QUrl url(QStringLiteral("qrc:qml/main.qml"));
