@@ -10,5 +10,6 @@
         <file>qml/main.qml</file>
         <file>qml/mainwindow.qml</file>
         <file>images/transfersign.png</file>
+        <file>qml/registerfrom.qml</file>
     </qresource>
 </RCC>

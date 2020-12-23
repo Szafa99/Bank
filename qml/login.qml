@@ -19,11 +19,6 @@ Window {
 
 
 
-//    function startsession(){
-//        var component = Qt.createComponent("qrc:/example.qml")
-//                    var window = component.createObject(root)
-//                    window.show()
-//    }
 
     Connections{
         target: logintxt
@@ -314,7 +309,7 @@ Window {
             }
 
             Rectangle{
-
+                id:login_button
                 height: pinrect.height*1.5
                 anchors.bottomMargin: 10
                 anchors.left: keyboard_grid.left
@@ -346,6 +341,32 @@ Window {
             }
 
 
+        }
+        Rectangle{
+            id: register_button
+
+            height: login_button.height*0.9
+            width: login_button.width
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: user_interface_rec.bottom
+            anchors.topMargin: login_button.anchors.bottomMargin
+            color: register_area.pressed ? "darkred" : "red"
+            radius:10
+
+
+            Text{
+                anchors.centerIn: parent
+                color:"white"
+                text: "Join BankName"
+            }
+
+            MouseArea
+            {
+                id : register_area
+                anchors.fill: parent
+                onClicked:  mainpage.source="qrc:/qml/registerfrom.qml"
+
+            }
         }
     }
 }

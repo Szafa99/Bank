@@ -37,7 +37,7 @@ Window {
                 width:text.width
                 height: generallinfo.height/4
                 color: "#f7f6f6"
-                text: "Hello,"//+ session.get_data_from_clients_table("FirstName")
+                text: "Hello,"+ session.get_data_from_clients_table("FirstName")
                 font.pixelSize: height
                 anchors.horizontalCenter: parent.horizontalCenter
             }
@@ -60,15 +60,22 @@ Window {
                 width:text.width
                 height: balance1.height
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "test"//+session.get_data_from_clients_table("acountbalance")
+                text: session.get_data_from_clients_table("acountbalance")+" PLN"
                 font.pixelSize:height
                 color: "#eae9e9"
             }
-            ///////////////////////////////////////////////////// buttons of maketransfer and so on
+
+
+
+
+     ////////////////////////////row with buttons from menu
             Row{
+
                 id: userbuttons
                 spacing: generallinfo.width/4
                 anchors.horizontalCenter: parent.horizontalCenter
+
+                //mask used to make the buttons round
                 Rectangle{
                     id:signmask
                     width: balance1.width/8
@@ -80,36 +87,73 @@ Window {
 
                 Image {
 
-                    id: transferimage
+                    id: transfer_image
                     source: "../images/transfersign.png"
                     width: balance1.width/8
                     height: width
+
                     fillMode: Image.PreserveAspectCrop
                     layer.enabled: true
                     layer.effect: OpacityMask {
                         maskSource: signmask
+                    }
+                    MouseArea{
+                        hoverEnabled: true
+                        id:transfer_button
+                        anchors.fill: parent
+                        onEntered:{
+                            parent.width+=1.5
+                            parent.height+=1.5
+                            parent.opacity-=0.3
+                        }
+                        onExited:{
+                            parent.width-=1.5
+                            parent.height-=1.5
+                            parent.opacity+=0.3
+                        }
+                        onClicked: {
+
+                        }
                     }
                 }
 
 
 
                 Image {
-                    id: menuimage
-                    width: transferimage.width
-                    height: transferimage.height
+                    id: menu_image
+                    width: balance1.width/8
+                    height: width
                     source: "../images/transfersign.png"
                     fillMode: Image.PreserveAspectCrop
                     layer.enabled: true
                     layer.effect: OpacityMask {
                         maskSource: signmask
                     }
+                    MouseArea{
+                        hoverEnabled: true
+                        id:menu_button
+                        anchors.fill: parent
+                        onEntered:{
+                            parent.width+=1.5
+                            parent.height+=1.5
+                            parent.opacity-=0.3
+                        }
+                        onExited:{
+                            parent.width-=1.5
+                            parent.height-=1.5
+                            parent.opacity+=0.3
+                        }
+                        onClicked: {
+
+                        }
+                    }
                 }
 
 
                 Image {
-                    id: accountinfoimage
-                    width: transferimage.width
-                    height: transferimage.height
+                    id: accountinfo_image
+                    width: balance1.width/8
+                    height: width
                     opacity:1
                     source: "../images/transfersign.png"
 
@@ -119,12 +163,21 @@ Window {
                         maskSource: signmask
                     }
                     MouseArea{
-                        id:accountinfobutton
-                        anchors.fill: parent
+                        hoverEnabled: true
+                        id:accountinfo_button
+                        anchors.fill: parent 
+                        onEntered:{
+                            parent.width+=1.5
+                            parent.height+=1.5
+                            parent.opacity-=0.3
+                        }
+                        onExited:{
+                            parent.width-=1.5
+                            parent.height-=1.5
+                            parent.opacity+=0.3
+                        }
                         onClicked: {
-                            accountinfoimage.width=width+1
-                            accountinfoimage.height=height+1
-                            accountinfoimage.opacity=0.8
+
                         }
                     }
                 }
@@ -151,31 +204,12 @@ ListView {
     width: generallinforec.width-10
     height:generallinforec.height*1.5
 
-    model:ListModel{
-        ListElement{
-            transferamount:"123"
-            Date:"22.03.2021"
-            transfername:"Spotify"
-        }
-
-        ListElement{
-            transferamount:"123"
-            Date:"22.03.2021"
-            transfername:"Spotify"
-        }
-
-        ListElement{
-            transferamount:"123"
-            Date:"22.03.2021"
-            transfername:"Spotify"
-        }
 
 
-    }
 
-    /* Transfer_list {
-            client_transfer_data:session.gettransfers()
-      }*/
+    model: Transfer_list{
+       client_transfer_data:session.gettransfers()
+      }
 
     delegate: Rectangle {
         width: parent.width
@@ -185,7 +219,6 @@ ListView {
             width: parent.width
             height: 2
             color: "grey"
-
         }
 
         Text {
