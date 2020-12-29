@@ -2,7 +2,7 @@ import QtQuick.Window 2.12
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.15
-import Action_enum 1.0
+//import Action_enum 1.0
 
 Window {
     id:root
@@ -12,8 +12,7 @@ Window {
     height: 480
     visible: true
     title: qsTr("Welcome!")
-    property int input_height: form.height/16
-    property double input_rec_scale: 1.2
+
 
 
 
@@ -48,190 +47,33 @@ Window {
             z:1
             border.color: "red"
             width: root.width/2.2
-            Column{
 
-                id:form
+            /////////////////////////////////////////////////////Load form
+
+            Loader{
+                id:formloader
                 anchors.fill: parent
-                anchors.margins: 10
-                spacing:firstname_rec.height
-
-
-                Rectangle{
-                    id:firstname_rec
-                    height:input_height*input_rec_scale
-                    width: parent.width
-                    border.color: "lightgrey"
-                    border.width: 1
-
-                    TextInput{
-                        id:firstname_input
-                        objectName: "FirstName"
-
-                        color: "grey"
-                        anchors.fill: parent
-                        font.pixelSize: input_height
-                        text: Register.get_form_cell("FirstName")
-
-
-
-                        onTextChanged: Register.setForm({"FirstName":text},Cell_action.Data_changed)
-                        onEditingFinished: Register.setForm({"FirstName":text},Cell_action.Editing_Finished)
-                        MouseArea{
-                            anchors.fill:parent
-                            onClicked: Register.setForm({"FirstName":parent.text},Cell_action.Clicked)
-                        }
-                    }
-                }
-
-                Rectangle{
-
-
-                    width: parent.width
-                    height: secondname_input.font.pixelSize*input_rec_scale
-                    border.color: "lightgrey"
-                    border.width: 1
-                    TextInput{
-                        id:secondname_input
-                        objectName: "SecondName"
-
-                        anchors.fill: parent
-                        text: Register.get_form_cell("SecondName")
-                        font.pixelSize: input_height
-                        color: "grey"
-
-                        onTextChanged: Register.setForm({"SecondName":text},Cell_action.Data_changed )
-                        onEditingFinished: Register.setForm({"SecondName":text},Cell_action.Editing_Finished)
-                        MouseArea{
-                            anchors.fill:parent
-                            onClicked: Register.setForm({"SecondName":parent.text},Cell_action.Clicked)
-                        }
-                    }
-
-                }
-
-
-                Rectangle{
-
-                    width: parent.width
-                    height: email_input.font.pixelSize*input_rec_scale
-                    border.color: "lightgrey"
-                    border.width: 1
-                    TextInput{
-                        id:email_input
-                        objectName: "Email"
-
-                        anchors.fill: parent
-                        anchors.centerIn: parent
-                        text: Register.get_form_cell("Email")
-                        font.pixelSize: input_height
-                        color: "grey"
-
-                        onEditingFinished: Register.setForm({"Email":text},Cell_action.Editing_Finished)
-                        onTextChanged: Register.setForm({"Email":text},Cell_action.Data_changed)
-                        MouseArea{
-                            anchors.fill:parent
-                            onClicked: Register.setForm({"Email":parent.text},Cell_action.Clicked)
-                        }
-                    }
-                }
-
-                Rectangle{
-                    width: parent.width
-                    height: input_height*input_rec_scale
-                    border.color: "lightgrey"
-                    border.width: 1
-                    TextInput{
-                        id:pesel_input
-                        objectName: "Pesel"
-
-                        anchors.fill: parent
-                        anchors.centerIn: parent
-                        text: Register.get_form_cell("Pesel")
-                        color: "grey"
-                        font.pixelSize: input_height
-
-                        onTextChanged: Register.setForm({"Pesel":text},Cell_action.Data_changed)
-                        onEditingFinished: Register.setForm({"Pesel":text},Cell_action.Editing_Finished)
-                        MouseArea{
-                            anchors.fill:parent
-                            onClicked: Register.setForm({"Pesel":parent.text},Cell_action.Clicked)
-                        }
-                    }
-                }
-                Rectangle{
-                    width: parent.width
-                    height: citizenship_input.font.pixelSize*input_rec_scale
-                    border.color: "lightgrey"
-                    border.width: 1
-                    TextInput{
-                        id:citizenship_input
-                        objectName: "CitizenShip"
-
-                        anchors.fill: parent
-                        anchors.centerIn: parent
-                        color: "grey"
-                        text: Register.get_form_cell("CitizenShip")
-                        font.pixelSize: input_height
-
-                        onEditingFinished: Register.setForm({"CitizenShip":text},Cell_action.Editing_Finished)
-                        onTextChanged: Register.setForm({"CitizenShip":text},Cell_action.Data_changed)
-                        MouseArea{
-                            anchors.fill:parent
-                            onClicked: Register.setForm({"CitizenShip":parent.text},Cell_action.Clicked)
-                        }
-                    }
-                }
-
-                Rectangle{
-                    width: parent.width
-                    height: birtplace_input.font.pixelSize*input_rec_scale
-                    border.color: "lightgrey"
-                    border.width: 1
-                    TextInput{
-                        id:birtplace_input
-                        objectName: "BirthPlace"
-
-                        anchors.fill: parent
-                        anchors.centerIn: parent
-                        color: "grey"
-                        text: Register.get_form_cell("BirthPlace")
-                        font.pixelSize: input_height
-
-                        onEditingFinished: Register.setForm({"BirthPlace":text},Cell_action.Editing_Finished)
-                        onTextChanged: Register.setForm({"BirthPlace":text},Cell_action.Data_changed)
-                        MouseArea{
-                            anchors.fill:parent
-                            onClicked: Register.setForm({"BirthPlace":parent.text},Cell_action.Clicked)
-                        }
-                    }
-                }
-
-                Rectangle{
-                    width: parent.width
-                    height: mothername_input.font.pixelSize*input_rec_scale
-                    border.color: "lightgrey"
-                    border.width: 1
-                    TextInput{
-                        id: mothername_input
-                        objectName: "MotherName"
-
-                        anchors.fill: parent
-                        anchors.centerIn: parent
-                        color: "grey"
-                        text: Register.get_form_cell("MotherName")
-                        font.pixelSize: input_height
-
-                        onEditingFinished: Register.setForm({"MotherName":text},Cell_action.Editing_Finished)
-                        onTextChanged: Register.setForm({"MotherName":text},Cell_action.Data_changed)
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: Register.setForm({"MotherName":parent.text},Cell_action.Clicked)
-                        }
-                    }
-                }
-
+                focus: true
+                source: "qrc:/qml/user_info_form.qml"
 
             }
         }
     }
+    //=============================================================================
+    Rectangle {
+        height: root.height*0.08
+        width: root.width * 0.4
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: root.height * 0.01
+
+        Loader{
+            id:navigationloader
+            anchors.fill: parent
+            focus: true
+
+            source: "qrc:/qml/first_form_nav.qml"
+        }
+    }
+
 }

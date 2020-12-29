@@ -4,14 +4,18 @@ import QtQuick.Window 2.12
 
 Window{
     visible: false
- Loader{
+    minimumHeight: 180
+    minimumWidth: 340
+    width: 640
+    height: 480
+
      Loader{
          id:mainpage
          anchors.fill: parent
+         focus:true
          source: "qrc:/qml/login.qml"
 
      }
 
- }
 
 }

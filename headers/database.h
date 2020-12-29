@@ -6,6 +6,7 @@
 #include <QtSql/QSqlDatabase>
 #include<QtSql/QSqlQuery>
 #include<QtSql/QSqlError>
+#include<QtSql/QSqlField>
 #include "session.h"
 
 
@@ -16,9 +17,11 @@ class Data_base
 //b    friend class Transfer_list;
     friend class Session;
     friend class Login;
-public:
-     Data_base(QString hostname ,QString username,QString password ,QString dbname ,QString sqlengine);
 
+private:
+    Data_base(QString hostname ,QString username,QString password ,QString dbname ,QString sqlengine);
+
+public:
       enum dbtables{
          clients=1,
          client_payments
@@ -34,14 +37,24 @@ private: //fields
         QString db_Name;
         QString db_Engine;
 
+
 public: //methods
         bool validet_user(const QString &username,const QString &pin,QString &clientid);
         bool get_client_id();
+        Data_base(Data_base const&)=delete;
+        void operator=(Data_base const&)=delete;
+
+        static Data_base &get_instance(){
+            static Data_base instance("localhost","root","","bank_clients","QMYSQL");
+            return instance;
+        };
+        bool add_client(QVariantMap data,dbtables table);
 
 private: //methods
       QVector<QVariantMap> set_clients_transfers(QString clientid);
       QString getclient_data(QString data, dbtables table,QString client_id)const;
+
 };
 
-
+Q_DECLARE_METATYPE(QSqlField)
 #endif // Data_base_H

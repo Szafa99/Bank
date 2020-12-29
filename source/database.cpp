@@ -95,6 +95,55 @@ QString Data_base::getclient_data(QString data, dbtables table,QString client_id
 
 }
 
+bool Data_base::add_client(QVariantMap data,dbtables table)
+{
+
+    if(!this->clientdb.isOpen()) return false;
+
+    QSqlQuery myquery;
+    QSqlRecord myrecord;
+    QString keys ,values;
+
+    switch(table){
+    case clients:{
+        keys = "INSERT INTO `clients` (";
+        values = " VALUES (";
+        myrecord = clientdb.driver()->record("clients");
+
+        for(QVariantMap::Iterator i = data.begin(); i!=data.end() ;i++){
+            if(myrecord.contains(i.key() ) ){
+
+                keys+=( "`"+ qvariant_cast<QString>(i.key()) + "`, " );
+                values+=( "'"+ qvariant_cast<QString>(i.value()) + "', " );
+
+            }
+        }
+
+        values.replace(values.size()-2,1,")");
+        keys.replace(keys.size()-2,1,")");
+
+        if(myquery.exec(keys+values) )
+            return true;
+        else
+        {
+            qCritical()<<myquery.lastError();
+            return false;
+        }
+    }
+        break;
+    case client_payments:
+    {}
+        break;
+    default:
+    {}
+
+    }
+
+    return true;
+
+
+}
+
 
 
 

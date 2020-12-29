@@ -352,8 +352,6 @@ Window {
             anchors.topMargin: login_button.anchors.bottomMargin
             color: register_area.pressed ? "darkred" : "red"
             radius:10
-
-
             Text{
                 anchors.centerIn: parent
                 color:"white"

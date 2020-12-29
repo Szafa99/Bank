@@ -5,7 +5,7 @@ Login::Login(Session *msession,QObject *parent):
     QObject(parent),
     clientid(""),
     startsession(msession),
-    client_db(new Data_base("localhost","root","","bank_clients","QMYSQL") ),
+    client_db(&Data_base::get_instance() ),
     pin("pin"),
     username("martinszafarczyk@gmail.com")
 {
@@ -16,7 +16,8 @@ Login::Login(Session *msession,QObject *parent):
 
 Login::~Login()
 {
-    delete client_db;
+   // delete client_db; changed database to Singelton, deleted "delte" method
+
 }
 
 
@@ -65,7 +66,7 @@ bool Login::loguserin(const QString &mpin,const QString &musername)
 {
     qDebug()<<"username:"<<musername<<" pin :"<<mpin;
     if(setusername(musername) && setpin(mpin) && client_db->validet_user(musername,mpin,clientid)){
-        startsession->db=client_db;
+        startsession->db= &Data_base::get_instance();
         startsession->client_id=clientid;
         startsession->transfers=client_db->set_clients_transfers(clientid);
 

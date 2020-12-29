@@ -17,7 +17,6 @@ class Transfer_list : public QAbstractListModel
 
     Q_OBJECT
     Q_PROPERTY(QVector<QVariantMap>  client_transfer_data READ client_transfer_data WRITE set_client_transfer_data)
-    Q_PROPERTY(QString smt READ smt WRITE setSmt)
 public:
     explicit Transfer_list(QObject *parent=nullptr ):
         QAbstractListModel(parent)
@@ -31,10 +30,6 @@ public:
 
 public slots:
 
-
-    QString smt(){return msmt;};
-
-    void setSmt(const QString & val){ msmt= val;};
 
     QVector<QVariantMap> client_transfer_data() const {return mclient_transfer_data;};
 
@@ -61,7 +56,7 @@ public slots:
 private:
 
    QVector<QVariantMap> mclient_transfer_data;
-    QString msmt;
+
 
 };
 

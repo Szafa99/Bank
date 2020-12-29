@@ -25,17 +25,17 @@ int main(int argc, char *argv[])
 
 
     QQmlApplicationEngine engine;
-//    Session session;
-//    Login log(&session);
-        Register reg;
+    Session session;
+    Login log(&session);
+    Register reg;
 
     engine.rootContext()->setContextProperty("Register",&reg);
 
-//    engine.rootContext()->setContextProperty("log",&log);
-//    engine.rootContext()->setContextProperty("session",&session);
+    engine.rootContext()->setContextProperty("log",&log);
+    engine.rootContext()->setContextProperty("session",&session);
 
 
-    const QUrl url(QStringLiteral("qrc:qml/registerfrom.qml"));
+    const QUrl url(QStringLiteral("qrc:qml/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)

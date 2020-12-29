@@ -11,5 +11,9 @@
         <file>qml/mainwindow.qml</file>
         <file>images/transfersign.png</file>
         <file>qml/registerfrom.qml</file>
+        <file>qml/user_info_form.qml</file>
+        <file>qml/adres_form.qml</file>
+        <file>qml/first_form_nav.qml</file>
+        <file>qml/last_form_nav.qml</file>
     </qresource>
 </RCC>
