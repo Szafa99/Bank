@@ -8,6 +8,7 @@
 #include <headers/login.h>
 #include <headers/transfer_list.h>
 #include <headers/register.h>
+#include <headers/form.h>
 
 int main(int argc, char *argv[])
 {
@@ -17,10 +18,12 @@ int main(int argc, char *argv[])
 
 
     qRegisterMetaType<QVector<QVariantMap>>("transfertype");
-    qRegisterMetaType<Register::Action_on_cell>("Action_on_cell");
+    qRegisterMetaType<Form::Action_on_cell>("Action_on_cell");
+    qmlRegisterType<Register>("Register",1,0,"Register");
+    //qmlRegisterType<Form>("Form",1,0,"Form");
 
 
-    qmlRegisterUncreatableType<Register>("Action_enum", 1, 0, "Cell_action",
+    qmlRegisterUncreatableType<Form>("Action_enum", 1, 0, "Cell_action",
                                             "Not creatable as it is an enum type.");
 
 
@@ -29,6 +32,7 @@ int main(int argc, char *argv[])
     Login log(&session);
     Register reg;
 
+    engine.rootContext()->setContextProperty("Form",&Form::getInstance());
     engine.rootContext()->setContextProperty("Register",&reg);
 
     engine.rootContext()->setContextProperty("log",&log);
@@ -43,7 +47,7 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
-    reg.setroot(engine.rootObjects().at(0));
+    Form::getInstance().setroot(engine.rootObjects().at(0));
 
 
     return app.exec();

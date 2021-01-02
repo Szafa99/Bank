@@ -15,5 +15,6 @@
         <file>qml/adres_form.qml</file>
         <file>qml/first_form_nav.qml</file>
         <file>qml/last_form_nav.qml</file>
+        <file>qml/calendar.qml</file>
     </qresource>
 </RCC>

@@ -9,12 +9,13 @@ Item{
     property double input_rec_scale: 1.2
 
     Connections{
-    target: Register
-    onError_infoChanged:{errorinfo.text=Register.get_error_info();console.log("errorChanged")}
+        target: Form
+        onError_infoChanged:{errorinfo.text=Form.get_error_info();console.log("errorChanged")}
     }
     Column{
 
         id:form
+        activeFocusOnTab: true
         anchors.fill: parent
         anchors.margins: 10
         spacing: form_spacing
@@ -22,26 +23,26 @@ Item{
             property string bordercolor: "lightgrey"
             id:first_rec
             height:input_height*input_rec_scale
-            width: parent.width
-
             border.color: bordercolor
+            width: parent.width
             border.width: 1
 
             TextInput{
                 objectName: "City"
-
+                activeFocusOnTab: true
                 color: "grey"
                 anchors.fill: parent
                 font.pixelSize: input_height
-                text: Register.get_form_cell("City")
+                text: Form.get_form_cell("City")
 
 
 
-                onTextChanged: Register.setForm({"City":text},Cell_action.Data_changed)
-                onEditingFinished: Register.setForm({"City":text},Cell_action.Editing_Finished)
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: Register.setForm({"City":parent.text},Cell_action.Clicked)
+                onTextChanged: Form.setForm({"City":text},Cell_action.Data_changed)
+                onActiveFocusChanged: {
+                    if(activeFocus)
+                        Form.setForm({"City":parent.text},Cell_action.Clicked)
+                    else
+                        Form.setForm({"City":text},Cell_action.Editing_Finished)
                 }
             }
         }
@@ -55,17 +56,18 @@ Item{
             border.width: 1
             TextInput{
                 objectName: "StreetName"
-
+                activeFocusOnTab: true
                 anchors.fill: parent
-                text: Register.get_form_cell("StreetName")
+                text: Form.get_form_cell("StreetName")
                 font.pixelSize: input_height
                 color: "grey"
 
-                onTextChanged: Register.setForm({"StreetName":text},Cell_action.Data_changed )
-                onEditingFinished: Register.setForm({"StreetName":text},Cell_action.Editing_Finished)
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: Register.setForm({"StreetName":parent.text},Cell_action.Clicked)
+                onTextChanged: Form.setForm({"StreetName":text},Cell_action.Data_changed )
+                onActiveFocusChanged: {
+                    if(activeFocus)
+                        Form.setForm({"StreetName":parent.text},Cell_action.Clicked)
+                    else
+                        Form.setForm({"StreetName":text},Cell_action.Editing_Finished)
                 }
             }
 
@@ -80,18 +82,20 @@ Item{
             border.width: 1
             TextInput{
                 objectName: "HouseNumber"
-
+                activeFocusOnTab: true
                 anchors.fill: parent
                 anchors.centerIn: parent
-                text: Register.get_form_cell("HouseNumber")
+                text: Form.get_form_cell("HouseNumber")
                 font.pixelSize: input_height
                 color: "grey"
 
-                onEditingFinished: Register.setForm({"HouseNumber":text},Cell_action.Editing_Finished)
-                onTextChanged: Register.setForm({"HouseNumber":text},Cell_action.Data_changed)
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: Register.setForm({"HouseNumber":parent.text},Cell_action.Clicked)
+
+                onTextChanged: Form.setForm({"HouseNumber":text},Cell_action.Data_changed)
+                onActiveFocusChanged: {
+                    if(activeFocus)
+                        Form.setForm({"HouseNumber":parent.text},Cell_action.Clicked)
+                    else
+                        Form.setForm({"HouseNumber":text},Cell_action.Editing_Finished)
                 }
             }
         }
@@ -104,21 +108,19 @@ Item{
             border.width: 1
             TextInput{
                 objectName: "PostalCode"
-
+                activeFocusOnTab: true
                 anchors.fill: parent
                 anchors.centerIn: parent
-                text: Register.get_form_cell("PostalCode")
+                text: Form.get_form_cell("PostalCode")
                 color: "grey"
                 font.pixelSize: input_height
 
-                onTextChanged: Register.setForm({"PostalCode":text},Cell_action.Data_changed)
-                onEditingFinished: Register.setForm({"PostalCode":text},Cell_action.Editing_Finished)
-
-
-                MouseArea{
-                    anchors.fill:parent
-
-                    onClicked: Register.setForm({"PostalCode":parent.text},Cell_action.Clicked)
+                onTextChanged: Form.setForm({"PostalCode":text},Cell_action.Data_changed)
+                onActiveFocusChanged: {
+                    if(activeFocus)
+                        Form.setForm({"PostalCode":parent.text},Cell_action.Clicked)
+                    else
+                        Form.setForm({"PostalCode":text},Cell_action.Editing_Finished)
                 }
             }
         }
@@ -130,18 +132,20 @@ Item{
             border.width: 1
             TextInput{
                 objectName: "Pin"
-
+                activeFocusOnTab: true
                 anchors.fill: parent
                 anchors.centerIn: parent
                 color: "grey"
-                text: Register.get_form_cell("Pin")
+                text: Form.get_form_cell("Pin")
                 font.pixelSize: input_height
 
-                onEditingFinished: Register.setForm({"Pin":text},Cell_action.Editing_Finished)
-                onTextChanged: Register.setForm({"Pin":text},Cell_action.Data_changed)
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: Register.setForm({"Pin":parent.text},Cell_action.Clicked)
+
+                onTextChanged: Form.setForm({"Pin":text},Cell_action.Data_changed)
+                onActiveFocusChanged: {
+                    if(activeFocus)
+                        Form.setForm({"Pin":parent.text},Cell_action.Clicked)
+                    else
+                        Form.setForm({"Pin":text},Cell_action.Editing_Finished)
                 }
             }
         }
@@ -153,23 +157,21 @@ Item{
             height: input_height*input_rec_scale
             border.color: bordercolor
             border.width: 1
-                TextInput{
+            TextInput{
                 objectName: "CheckPin"
                 anchors.fill: parent
+                activeFocusOnTab: true
 
-               // anchors.centerIn: parent
                 color: "grey"
-                text: Register.get_form_cell("CheckPin")
+                text: Form.get_form_cell("CheckPin")
                 font.pixelSize: input_height
 
-                onEditingFinished: Register.setForm({"CheckPin":text},Cell_action.Editing_Finished)
-                onTextChanged: Register.setForm({"CheckPin":text},Cell_action.Data_changed)
-
-                onActiveFocusChanged: Register.setForm({"CheckPin":text},Cell_action.Editing_Finished)
-                MouseArea{
-                    onFocusChanged: Register.setForm({"CheckPin":parent.text},Cell_action.Editing_Finished)
-                    anchors.fill:parent
-                    onClicked: Register.setForm({"CheckPin":parent.text},Cell_action.Clicked)
+                onTextChanged: Form.setForm({"CheckPin":text},Cell_action.Data_changed)
+                onActiveFocusChanged: {
+                    if(activeFocus)
+                        Form.setForm({"CheckPin":parent.text},Cell_action.Clicked)
+                    else
+                        Form.setForm({"CheckPin":text},Cell_action.Editing_Finished)
                 }
             }
         }
@@ -185,16 +187,17 @@ Item{
                 objectName: "Password"
 
                 anchors.fill: parent
-               // anchors.centerIn: parent
+                activeFocusOnTab: true
                 color: "grey"
-                text: Register.get_form_cell("Password")
+                text: Form.get_form_cell("Password")
                 font.pixelSize: input_height
 
-                onEditingFinished: Register.setForm({"Password":text},Cell_action.Editing_Finished)
-                onTextChanged: Register.setForm({"Password":text},Cell_action.Data_changed)
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: Register.setForm({"Password":parent.text},Cell_action.Clicked)
+                onTextChanged: Form.setForm({"Password":text},Cell_action.Data_changed)
+                onActiveFocusChanged: {
+                    if(activeFocus)
+                        Form.setForm({"Password":parent.text},Cell_action.Clicked)
+                    else
+                        Form.setForm({"Password":text},Cell_action.Editing_Finished)
                 }
             }
         }
@@ -207,32 +210,34 @@ Item{
             border.width: 1
             TextInput{
                 objectName: "CheckPassword"
-
+                activeFocusOnTab: true
                 anchors.fill: parent
                 anchors.centerIn: parent
                 color: "grey"
-                text: Register.get_form_cell(objectName)
+                text: Form.get_form_cell(objectName)
                 font.pixelSize: input_height
 
-                onEditingFinished: Register.setForm({"CheckPassword":text},Cell_action.Editing_Finished)
-                onTextChanged: Register.setForm({"CheckPassword":text},Cell_action.Data_changed)
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: Register.setForm({"CheckPassword":parent.text},Cell_action.Clicked)
+
+                onTextChanged: Form.setForm({"CheckPassword":text},Cell_action.Data_changed)
+                onActiveFocusChanged: {
+                    if(activeFocus)
+                        Form.setForm({"CheckPassword":parent.text},Cell_action.Clicked)
+                    else
+                        Form.setForm({"CheckPassword":text},Cell_action.Editing_Finished)
                 }
             }
         }
         Text{
             id: errorinfo
             width: parent.width
-            fontSizeMode: Text.Fit
+            fontSizeMode: Text.horizontalAlignment
             font.bold:true
             height: input_height*input_rec_scale
             color: "red"
 
-                text: Register.get_error_info()
+            text: Form.get_error_info()
 
-            }
+        }
     }
 
 }

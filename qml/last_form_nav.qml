@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
+
 Item{
     anchors.fill: parent
     property string lastobject:""
@@ -24,7 +25,7 @@ Item{
                 id:backmousearea
                 anchors.fill: parent
                 onClicked: {
-                    Register.update()
+                    Form.update()
                     navigationloader.source="qrc:/qml/first_form_nav.qml"
                     formloader.source="qrc:/qml/user_info_form.qml"
                 }
@@ -39,7 +40,7 @@ Item{
             Text{
                 anchors.centerIn: parent
                 color:"white"
-                text: "Register account"
+                text: "register account"
             }
 
             MouseArea
@@ -47,7 +48,7 @@ Item{
                 id:registermousearea
                 anchors.fill: parent
                 onClicked: {
-                      Register.update()
+                      Form.update()
                   if(Register.validet_input() && Register.register_user() )
                      mainpage.source="qrc:/qml/login.qml"
                     }

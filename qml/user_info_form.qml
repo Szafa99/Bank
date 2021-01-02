@@ -4,13 +4,15 @@ import Action_enum 1.0
 
 Item{
 
-    property int input_height: form.height/18
+    property int input_height: form.height/19
     property double input_rec_scale: 1.2
 
     Connections{
-    target: Register
-    onError_infoChanged:{errorinfo.text=Register.get_error_info();console.log("errorChanged")}
+        target: Form
+        onError_infoChanged:{errorinfo.text=Form.get_error_info();console.log("errorChanged")}
+
     }
+
     Column{
 
         id:form
@@ -26,22 +28,25 @@ Item{
             border.width: 1
 
             TextInput{
+
+
                 id:first_input
                 objectName: "FirstName"
-
+                activeFocusOnTab: true
                 color: "grey"
                 anchors.fill: parent
                 font.pixelSize: input_height
-                text: Register.get_form_cell("FirstName")
+                text: Form.get_form_cell("FirstName")
 
-
-
-                onTextChanged: Register.setForm({"FirstName":text},Cell_action.Data_changed)
-                onEditingFinished: Register.setForm({"FirstName":text},Cell_action.Editing_Finished)
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: Register.setForm({"FirstName":parent.text},Cell_action.Clicked)
+                onActiveFocusChanged: {
+                    if(first_input.activeFocus){
+                        Form.setForm({"FirstName":first_input.text},Cell_action.Clicked)
+                    console.log("click")}
+                    else
+                        Form.setForm({"FirstName":text},Cell_action.Editing_Finished)
                 }
+                onTextChanged: Form.setForm({"FirstName":text},Cell_action.Data_changed)
+
             }
         }
 
@@ -54,18 +59,21 @@ Item{
             TextInput{
                 id:secondname_input
                 objectName: "SecondName"
-
+                activeFocusOnTab: true
                 anchors.fill: parent
-                text: Register.get_form_cell("SecondName")
+                text: Form.get_form_cell("SecondName")
                 font.pixelSize: input_height
                 color: "grey"
 
-                onTextChanged: Register.setForm({"SecondName":text},Cell_action.Data_changed )
-                onEditingFinished: Register.setForm({"SecondName":text},Cell_action.Editing_Finished)
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: Register.setForm({"SecondName":parent.text},Cell_action.Clicked)
+                onTextChanged: Form.setForm({"SecondName":text},Cell_action.Data_changed )
+                onActiveFocusChanged: {
+                    if(activeFocus)
+                        Form.setForm({"SecondName":parent.text},Cell_action.Clicked)
+                    else
+                        Form.setForm({"SecondName":text},Cell_action.Editing_Finished)
                 }
+
+
             }
 
         }
@@ -81,19 +89,21 @@ Item{
             TextInput{
                 id:email_input
                 objectName: "Email"
-
+                activeFocusOnTab: true
                 anchors.fill: parent
                 anchors.centerIn: parent
-                text: Register.get_form_cell("Email")
+                text: Form.get_form_cell("Email")
                 font.pixelSize: input_height
                 color: "grey"
 
-                onEditingFinished: Register.setForm({"Email":text},Cell_action.Editing_Finished)
-                onTextChanged: Register.setForm({"Email":text},Cell_action.Data_changed)
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: Register.setForm({"Email":parent.text},Cell_action.Clicked)
+                onActiveFocusChanged: {
+                    if(activeFocus)
+                        Form.setForm({"Email":text},Cell_action.Clicked)
+                    else
+                        Form.setForm({"Email":text},Cell_action.Editing_Finished)
                 }
+                onTextChanged: Form.setForm({"Email":text},Cell_action.Data_changed)
+
             }
         }
 
@@ -106,18 +116,19 @@ Item{
             TextInput{
                 id:pesel_input
                 objectName: "Pesel"
-
+                activeFocusOnTab: true
                 anchors.fill: parent
                 anchors.centerIn: parent
-                text: Register.get_form_cell("Pesel")
+                text: Form.get_form_cell("Pesel")
                 color: "grey"
                 font.pixelSize: input_height
 
-                onTextChanged: Register.setForm({"Pesel":text},Cell_action.Data_changed)
-                onEditingFinished: Register.setForm({"Pesel":text},Cell_action.Editing_Finished)
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: Register.setForm({"Pesel":parent.text},Cell_action.Clicked)
+                onTextChanged: Form.setForm({"Pesel":text},Cell_action.Data_changed)
+                onActiveFocusChanged: {
+                    if(activeFocus)
+                        Form.setForm({"Pesel":text},Cell_action.Clicked)
+                    else
+                        Form.setForm({"Pesel":text},Cell_action.Editing_Finished)
                 }
             }
         }
@@ -130,18 +141,20 @@ Item{
             TextInput{
                 id:citizenship_input
                 objectName: "CitizenShip"
-
+                activeFocusOnTab: true
                 anchors.fill: parent
                 anchors.centerIn: parent
                 color: "grey"
-                text: Register.get_form_cell("CitizenShip")
+                text: Form.get_form_cell("CitizenShip")
                 font.pixelSize: input_height
 
-                onEditingFinished: Register.setForm({"CitizenShip":text},Cell_action.Editing_Finished)
-                onTextChanged: Register.setForm({"CitizenShip":text},Cell_action.Data_changed)
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: Register.setForm({"CitizenShip":parent.text},Cell_action.Clicked)
+
+                onTextChanged: Form.setForm({"CitizenShip":text},Cell_action.Data_changed)
+                onActiveFocusChanged: {
+                    if(activeFocus)
+                        Form.setForm({"CitizenShip":text},Cell_action.Clicked)
+                    else
+                        Form.setForm({"CitizenShip":text},Cell_action.Editing_Finished)
                 }
             }
         }
@@ -155,21 +168,42 @@ Item{
             TextInput{
                 id:birtplace_input
                 objectName: "BirthPlace"
-
+                activeFocusOnTab: true
                 anchors.fill: parent
                 anchors.centerIn: parent
                 color: "grey"
-                text: Register.get_form_cell("BirthPlace")
+                text: Form.get_form_cell("BirthPlace")
                 font.pixelSize: input_height
 
-                onEditingFinished: Register.setForm({"BirthPlace":text},Cell_action.Editing_Finished)
-                onTextChanged: Register.setForm({"BirthPlace":text},Cell_action.Data_changed)
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: Register.setForm({"BirthPlace":parent.text},Cell_action.Clicked)
+
+                onTextChanged: Form.setForm({"BirthPlace":text},Cell_action.Data_changed)
+                onActiveFocusChanged: {
+                    if(activeFocus)
+                        Form.setForm({"BirthPlace":text},Cell_action.Clicked)
+                    else
+                        Form.setForm({"BirthPlace":text},Cell_action.Editing_Finished)
                 }
             }
         }
+
+        Rectangle{
+            width: parent.width
+            height: input_height*input_rec_scale
+            property string bordercolor: "lightgrey"
+            border.color: bordercolor
+            border.width: 1
+            Loader{
+                 objectName: "BirthDay"
+                id:birthdayloader
+                anchors.fill: parent
+                focus: true
+                source: "qrc:/qml/calendar.qml"
+
+            }
+        }
+
+
+
 
         Rectangle{
             property string bordercolor: "lightgrey"
@@ -180,18 +214,20 @@ Item{
             TextInput{
                 id: mothername_input
                 objectName: "MotherName"
-
+                activeFocusOnTab: true
                 anchors.fill: parent
                 anchors.centerIn: parent
                 color: "grey"
-                text: Register.get_form_cell("MotherName")
+                text: Form.get_form_cell("MotherName")
                 font.pixelSize: input_height
 
-                onEditingFinished: Register.setForm({"MotherName":text},Cell_action.Editing_Finished)
-                onTextChanged: Register.setForm({"MotherName":text},Cell_action.Data_changed)
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: Register.setForm({"MotherName":parent.text},Cell_action.Clicked)
+
+                onTextChanged: Form.setForm({"MotherName":text},Cell_action.Data_changed)
+                onActiveFocusChanged: {
+                    if(activeFocus)
+                        Form.setForm({"MotherName":text},Cell_action.Clicked)
+                    else
+                        Form.setForm({"MotherName":text},Cell_action.Editing_Finished)
                 }
             }
         }
@@ -203,10 +239,10 @@ Item{
             width: parent.width
 
             height: input_height*input_rec_scale
-            text: Register.get_error_info()
+            text: Form.get_error_info()
 
             color: "red"
-            }
+        }
 
     }
 

@@ -10,6 +10,7 @@ Window{
     height: 480
 
      Loader{
+
          id:mainpage
          anchors.fill: parent
          focus:true
