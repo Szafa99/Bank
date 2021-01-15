@@ -1,15 +1,11 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 
-Window {
+Item {
 
 
     id:root
-    width: 640
-    height: 480
-    color: "black"
-    visible: true
-    title: qsTr("Hello World")
+    anchors.fill: parent
 
     Connections{
     target: logoanim

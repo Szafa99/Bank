@@ -8,11 +8,12 @@ void Form::setForm(const QVariantMap &formcell,Action_on_cell action)
 
         QQuickItem *cell = registergui->findChild<QQuickItem*>(key) ;
         lastcell=cell;
-
+          bool overwriteMode = cell->property("overwriteMode").toBool();
 
         switch (action) {
         case Action_on_cell::Data_changed:
         {
+
             if(formcell[key].isNull())return;
             mform[key]=formcell[key];
 
@@ -27,7 +28,7 @@ void Form::setForm(const QVariantMap &formcell,Action_on_cell action)
                 emit form_editedChanged();
             }
 
-            if(key=="BirthDay")
+            if(key=="TransferAmount")
                 qDebug()<<mform[key];
         }
             break;
@@ -36,7 +37,7 @@ void Form::setForm(const QVariantMap &formcell,Action_on_cell action)
             cell->setProperty("color","black");
             cell->setFocus(true);
 
-            if(mform_edited[key] == false )
+            if(!overwriteMode && mform_edited[key] == false )
             {
                 cell->setProperty("text","");
                 mform[key].clear();
@@ -50,7 +51,8 @@ void Form::setForm(const QVariantMap &formcell,Action_on_cell action)
 
             cell->setProperty("color","grey");
 
-            if(mform[key].isNull() || mform[key]=="")
+
+            if( (mform[key].isNull() || mform[key]==""))
             {
                 cell->setProperty("text",key);
                 mform[key]=key;
@@ -79,10 +81,21 @@ void Form::update()
 }
 
 
- void Form::setroot(QObject *engineroot)
-{
-    registergui=engineroot;
-}
+
+
+ void Form::setmodel(Data_base::dbtables tablename)
+ {
+     QVector<QString> keys;
+     keys.append(Data_base::get_instance().getcolumnnames(tablename) );
+     if(keys.isEmpty())return;
+     for(int i = 0;i<keys.count();i++ )
+     {
+
+         mform.insert(keys[i], keys[i]);
+         mform_edited.insert(keys[i], false );
+
+     }
+ }
 
 
 QVariant Form::get_form_cell(QString key)

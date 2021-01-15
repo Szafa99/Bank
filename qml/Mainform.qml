@@ -1,21 +1,12 @@
-import QtQuick.Window 2.12
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.15
+import Transfer 1.0
+import Register 1.0
 
 
-
-Window {
+Item {
     id:root
-    minimumHeight: 180
-    minimumWidth: 340
-    width: 640
-    height: 480
-    visible: true
-    title: qsTr("Welcome!")
-
-
-
+    anchors.fill: parent
 
     Rectangle{
         id:border_rec
@@ -28,10 +19,10 @@ Window {
             id: createlabel
             height: root.height/14
             anchors.top: border_rec.top
-            anchors.topMargin: user_interface_rec.y/2
+            anchors.topMargin: user_interface_rec.y*0.1
             anchors.horizontalCenter: parent.horizontalCenter
             font.pixelSize: height
-            text: "Create an account with BankName"
+            text: "Create account with NameBank"
         }
 
         Rectangle{
@@ -40,8 +31,8 @@ Window {
             clip: true
             anchors.top:createlabel.bottom
             anchors.bottom: parent.bottom
-            anchors.topMargin: 10
-            anchors.bottomMargin: 50
+            anchors.topMargin: createlabel.height*0.5
+            anchors.bottomMargin: createlabel.height*1.5
             anchors.horizontalCenter: createlabel.horizontalCenter
             radius: 5
             border.width:2
@@ -50,15 +41,35 @@ Window {
             width: root.width/2.2
 
             /////////////////////////////////////////////////////Load form
+Column{
 
-            Loader{
-                id:formloader
-                anchors.fill: parent
+    anchors.fill: parent
+     anchors.margins: 10
+    spacing: 2
+    Loader{
+                id: formloader
+                width: parent.width
+                height: parent.height*0.95
                 focus: true
-                source: "qrc:/qml/user_info_form.qml"
+                source: formcontent
 
             }
+
+            Label{
+                id:errorinfo
+                width: parent.width
+                height: parent.height*0.5
+                anchors.horizontalCenter:parent.horizontalCenter
+
+                fontSizeMode: Text.HorizontalFit
+                font.bold:true
+                text: Form.get_error_info()
+                color: "red"
+
+            }
+
         }
+ }
     }
     //=============================================================================
     Rectangle {
@@ -72,8 +83,10 @@ Window {
             id:navigationloader
             anchors.fill: parent
             focus: true
+            source: formcontent_nav
 
-            source: "qrc:/qml/first_form_nav.qml"
+
+
         }
     }
 

@@ -1,15 +1,15 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QMap>
-#include <QMultiMap>
 #include <QVector>
 
 #include <headers/login.h>
 #include <headers/transfer_list.h>
 #include <headers/register.h>
 #include <headers/form.h>
-
+#include <headers/formfactory.h>
+#include <headers/transfer.h>
+ QString Session::client_id=0;
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -19,21 +19,20 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<QVector<QVariantMap>>("transfertype");
     qRegisterMetaType<Form::Action_on_cell>("Action_on_cell");
+    qmlRegisterType<Transfer>("Transfer",1,0,"Transfer");
     qmlRegisterType<Register>("Register",1,0,"Register");
-    //qmlRegisterType<Form>("Form",1,0,"Form");
-
 
     qmlRegisterUncreatableType<Form>("Action_enum", 1, 0, "Cell_action",
                                             "Not creatable as it is an enum type.");
 
 
     QQmlApplicationEngine engine;
+    FormFactory::getInstance().setAppEngine(&engine);
+
     Session session;
     Login log(&session);
-    Register reg;
 
-    engine.rootContext()->setContextProperty("Form",&Form::getInstance());
-    engine.rootContext()->setContextProperty("Register",&reg);
+
 
     engine.rootContext()->setContextProperty("log",&log);
     engine.rootContext()->setContextProperty("session",&session);
@@ -47,7 +46,11 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     engine.load(url);
 
-    Form::getInstance().setroot(engine.rootObjects().at(0));
+    FormFactory::getInstance().setQmlEngine(engine.rootObjects().at(0));
+//    Register reg;
+//    engine.rootContext()->setContextProperty("Register",&reg);
+
+
 
 
     return app.exec();

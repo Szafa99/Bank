@@ -4,23 +4,21 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickItem>
-
+#include "database.h"
 
 class Form: public QObject
 {
     friend class Register;
+    friend class Transfer;
+    friend class FormFactory;
+
     Q_OBJECT
     Q_ENUMS(Action_on_cell)
-public:
-    static Form& getInstance(){
-        static Form form;
-        return form;
-    };
-    Form(Form const&)=delete;
-    void operator=(Form const&)=delete;
-
 private:
-    Form(QObject *parent = nullptr):QObject(parent) {}
+    Form(QObject *parent = nullptr,QObject *qmlengine=nullptr):QObject(parent),registergui(qmlengine)
+    {};
+
+
 
 public:
     Q_PROPERTY(QVariantMap form MEMBER mform NOTIFY formChanged)
@@ -33,6 +31,7 @@ public:
         Editing_Finished
     };
 public slots:
+
     void setForm( const QVariantMap & value,Action_on_cell action);
     QVariant get_form_cell(QString key);
     QVariant get_error_info();
@@ -42,11 +41,12 @@ signals:
     void form_editedChanged();
     void error_infoChanged();
 public:
-     void setroot(QObject *engineroot);
+
+     void setmodel(Data_base::dbtables tablename);
 private:
      void validet_input();
-
 private:
+
     QObject * registergui=NULL;
     QQuickItem * lastcell;
     QVariantMap mform;

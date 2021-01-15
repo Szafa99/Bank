@@ -1,10 +1,14 @@
 import QtQuick 2.0
 import Action_enum 1.0
 import QtQuick.Controls 2.12
+import Transfer 1.0
 
 
 Item{
     anchors.fill: parent
+
+    // here is a transfer object created which contains a form object to control the content of this qmlfile
+
 
     Row{
         anchors.fill: parent
@@ -18,7 +22,7 @@ Item{
         Text{
             anchors.centerIn: parent
             color:"white"
-            text: "Continue"
+            text: "Abort"
 
         }
         MouseArea
@@ -26,12 +30,8 @@ Item{
             id:nextmousearea
             anchors.fill: parent
             onClicked: {
-                Form.update();
-                if( formtype.validet_input() )
-                {
-                formcontent="qrc:/qml/adres_form.qml"
-                formcontent_nav="qrc:/qml/last_form_nav.qml"
-                }
+                formtype.destroy()
+                mainpage.source="qrc:/qml/mainwindow.qml"
             }
 
         }
@@ -46,7 +46,7 @@ Item{
             fontSizeMode:Text.HorizontalFit
             anchors.centerIn: parent
             color:"white"
-            text: "Back To Login"
+            text: "Send Transfer"
 
         }
         MouseArea
@@ -54,8 +54,12 @@ Item{
             id:backtologinarea
             anchors.fill: parent
             onClicked: {
-                formtype.destroy()
-                mainpage.source="qrc:/qml/login.qml"
+                if(formtype.validet_input() && formtype.make_transfer() )
+                {
+                    session.settransfers();
+                    formtype.destroy()
+                    mainpage.source="qrc:/qml/mainwindow.qml"
+                }
             }
         }
 

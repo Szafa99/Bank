@@ -1,8 +1,6 @@
 #include <headers/database.h>
 
 
-
-
 Data_base::Data_base(QString hostname,QString Username,QString Password,QString dbName,QString sqlengine):
     db_hostname(hostname),
     db_Username(Username),
@@ -47,19 +45,24 @@ bool Data_base::validet_user(const QString &username, const QString &pin, QStrin
     return false;
 }
 
+Data_base &Data_base::get_instance()
+{
+    static Data_base instance("localhost","root","","bank_clients","QMYSQL");
+    return instance;
+}
+
 
 QVector<QVariantMap> Data_base::set_clients_transfers(QString clientid)
 {
     QVector<QVariantMap> transfers;
     QSqlQuery myquery;
-    myquery.prepare( "SELECT * FROM clients_payments WHERE Client_id = '" + clientid+"' ");
+    myquery.prepare( "SELECT * FROM clients_payments WHERE id = '" + clientid+"' ");
     if(myquery.exec())
     {
-        //int i=0;
 
+        QSqlRecord myrecord = clientdb.driver()->record("clients_payments");
         while(myquery.next())
         {
-            QSqlRecord myrecord = clientdb.driver()->record("clients_payments");
             QVariantMap buf;
             for(int i=0;i<myrecord.count();i++){
                 buf.insert( clientdb.driver()->record("clients_payments").fieldName(i) ,myquery.value(i).toString() ) ;
@@ -74,6 +77,34 @@ QVector<QVariantMap> Data_base::set_clients_transfers(QString clientid)
 }
 
 
+QVector<QString> Data_base::getcolumnnames(Data_base::dbtables table)
+{
+    QVector<QString> columnkeys;
+    QSqlRecord myrecord;
+
+    switch (table)
+    {
+    case dbtables::client_payments: {
+        myrecord= clientdb.driver()->record("clients_payments");
+    }
+        break;
+    case dbtables::clients: myrecord= myrecord= clientdb.driver()->record("clients");
+        break;
+    default:
+    {
+        qCritical()<<"Didn't find table in " + db_Name;
+        return {""};
+    }
+    }
+    columnkeys.reserve(myrecord.count());
+    for(int i=0;i<myrecord.count();i++)
+        columnkeys.push_back( myrecord.fieldName(i)) ;
+
+    return columnkeys;
+
+}
+
+
 
 
 QString Data_base::getclient_data(QString data, dbtables table,QString client_id) const
@@ -82,7 +113,7 @@ QString Data_base::getclient_data(QString data, dbtables table,QString client_id
     if(table == clients)
         myquery.prepare( "SELECT " + data + " FROM clients WHERE id = " + client_id );
     else if(table==client_payments)
-        myquery.prepare( "SELECT " + data + " FROM clients_payments WHERE Client_id = " + client_id );
+        myquery.prepare( "SELECT " + data + " FROM clients_payments WHERE id = " + client_id );
 
 
     if(myquery.exec())
@@ -95,51 +126,117 @@ QString Data_base::getclient_data(QString data, dbtables table,QString client_id
 
 }
 
-bool Data_base::add_client(QVariantMap data,dbtables table)
+QString Data_base::getclient_data(const QString &data, dbtables table, const QString& formname,const QString& formdata) const
+{
+    QSqlQuery myquery;
+    QString temp;
+    if(table == clients)
+        myquery.prepare( "SELECT `" + data + "` FROM `clients` WHERE `" + formname + "` = '"+ formdata+"'" );
+    else if(table==client_payments)
+        myquery.prepare( "SELECT `" + data + "` FROM `clients_payments` WHERE `" + formname + "` = "+ formdata );
+
+
+    if(myquery.exec())
+    {
+        while(myquery.next())
+            return (myquery.value(0).toString());
+    }
+    else qDebug()<<"Couldn't fetch data about:" << data << " : " << myquery.lastError();
+    return QString::Null();
+}
+
+bool Data_base::check_if_data_exist(const QString &data,const QString& formName, Data_base::dbtables table)
+{
+    QSqlQuery myquery;
+    if(table == clients)
+        myquery.prepare( "SELECT "+ formName  + " FROM clients");
+    else if(table==client_payments)
+        myquery.prepare( "SELECT " + formName + " FROM clients_payments");
+
+
+    if(myquery.exec())
+    {
+        while (myquery.next()){
+            qDebug()<<myquery.value(0);
+            if( data == myquery.value(0).toString())return true;
+        }
+        }
+
+    else qCritical()<<" QUERY_ERROR IN CHECK_IF_DATA_EXIST FUNCTION " << myquery.lastError();
+    return false;
+
+}
+
+bool Data_base::updatedata(const QString &formname, const QString &newdata, Data_base::dbtables table, const QString &id)
+{
+    QSqlQuery myquery;
+    if(table == clients)
+        myquery.prepare( "UPDATE clients SET " + formname +" = " + newdata +" WHERE id = " + id );
+    else if(table == client_payments)
+        myquery.prepare( "UPDATE clients_payments SET " + formname +" = " + newdata +" WHERE id = " + id);
+
+
+    if(myquery.exec())
+        return true;
+
+    else qDebug()<<"Couldn't update:" << formname << " : " << myquery.lastError();
+    return false;
+}
+
+
+bool Data_base::insert_record(QVariantMap data,dbtables table)
 {
 
-    if(!this->clientdb.isOpen()) return false;
-
+    if(!this->clientdb.isOpen())
+    {
+        qCritical()<<"Database is closed.";
+        return false;
+    }
     QSqlQuery myquery;
     QSqlRecord myrecord;
     QString keys ,values;
+    values = " VALUES (";
 
-    switch(table){
+switch(table){
+
     case clients:{
         keys = "INSERT INTO `clients` (";
-        values = " VALUES (";
         myrecord = clientdb.driver()->record("clients");
+    }break;
 
-        for(QVariantMap::Iterator i = data.begin(); i!=data.end() ;i++){
-            if(myrecord.contains(i.key() ) ){
-
-                keys+=( "`"+ qvariant_cast<QString>(i.key()) + "`, " );
-                values+=( "'"+ qvariant_cast<QString>(i.value()) + "', " );
-
-            }
-        }
-
-        values.replace(values.size()-2,1,")");
-        keys.replace(keys.size()-2,1,")");
-
-        if(myquery.exec(keys+values) )
-            return true;
-        else
-        {
-            qCritical()<<myquery.lastError();
-            return false;
-        }
-    }
-        break;
     case client_payments:
-    {}
-        break;
+    {
+        keys = "INSERT INTO `clients_payments` (";
+        myrecord = clientdb.driver()->record("clients_payments");
+    }break;
     default:
-    {}
-
+    {
+    qCritical()<<"Table doesn't exist.";
+    return false;
     }
 
-    return true;
+}
+
+    // Preapering query which task is to insert a new record
+    for(QVariantMap::Iterator i = data.begin(); i!=data.end() ;i++){
+        if(myrecord.contains(i.key()) && myrecord.field(i.key()).type()!=QVariant::Type::Date &&
+                !myrecord.field(i.key()).isAutoValue())
+        {
+            keys+=( "`"+ qvariant_cast<QString>(i.key()) + "`, " );
+            values+=( "'"+ qvariant_cast<QString>(i.value()) + "', " );
+        }
+    }
+
+    values.replace(values.size()-2,1,")");// replacing "," with ")"
+    keys.replace(keys.size()-2,1,")");
+
+    if(myquery.exec(keys+values) )
+        return true;
+    else
+    {
+        qCritical()<<myquery.lastError();
+        return false;
+    }
 
 
 }

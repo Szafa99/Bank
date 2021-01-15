@@ -66,11 +66,8 @@ bool Login::loguserin(const QString &mpin,const QString &musername)
 {
     qDebug()<<"username:"<<musername<<" pin :"<<mpin;
     if(setusername(musername) && setpin(mpin) && client_db->validet_user(musername,mpin,clientid)){
-        startsession->db= &Data_base::get_instance();
         startsession->client_id=clientid;
-        startsession->transfers=client_db->set_clients_transfers(clientid);
-
-
+        startsession->settransfers();
 
         return true;
     }

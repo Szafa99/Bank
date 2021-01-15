@@ -7,9 +7,10 @@ Item{
     property int input_height: form.height/19
     property double input_rec_scale: 1.2
 
+
     Connections{
         target: Form
-        onError_infoChanged:{errorinfo.text=Form.get_error_info();console.log("errorChanged")}
+        onError_infoChanged:errorinfo.text=Form.get_error_info();
 
     }
 
@@ -17,7 +18,7 @@ Item{
 
         id:form
         anchors.fill: parent
-        anchors.margins: 10
+
         spacing:first_rec.height
         Rectangle{
             id:first_rec
@@ -39,9 +40,8 @@ Item{
                 text: Form.get_form_cell("FirstName")
 
                 onActiveFocusChanged: {
-                    if(first_input.activeFocus){
+                    if(first_input.activeFocus)
                         Form.setForm({"FirstName":first_input.text},Cell_action.Clicked)
-                    console.log("click")}
                     else
                         Form.setForm({"FirstName":text},Cell_action.Editing_Finished)
                 }
@@ -232,17 +232,6 @@ Item{
             }
         }
 
-        Label{
-            id:errorinfo
-            fontSizeMode: Text.Fit
-            font.bold:true
-            width: parent.width
-
-            height: input_height*input_rec_scale
-            text: Form.get_error_info()
-
-            color: "red"
-        }
 
     }
 

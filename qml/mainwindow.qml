@@ -2,19 +2,13 @@ import QtQuick 2.12
 import QtGraphicalEffects 1.0
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.15
-import QtQuick.Window 2.12
 import Transfer_list 1.0
+import Transfer 1.0
 
 
-
-Window {
+Item {
     id:root
-    minimumHeight: 180
-    minimumWidth: 340
-    width: 640
-    height: 480
-    visible: true
-    title: qsTr("Welcome!")
+    anchors.fill: parent
 
 
     Rectangle{
@@ -30,7 +24,31 @@ Window {
             id:generallinfo
             anchors.fill:parent
             spacing: height/14
+            anchors.margins: spacing
+            Rectangle{
+                anchors.right: parent.right
+                id: backtologin
 
+                width: parent.width*0.1
+                height: parent.height*0.2
+                color: backtologinarea.pressed ? "darkred" : "red"
+                radius:10
+                Text{
+                    fontSizeMode:Text.HorizontalFit
+                    anchors.centerIn: parent
+                    color:"white"
+                    text: "Logout"
+
+                }
+                MouseArea
+                {
+                    id:backtologinarea
+                    anchors.fill: parent
+                    onClicked: {mainpage.source="qrc:/qml/login.qml"
+
+                    }
+                }
+            }
 
             Text {
                 id: firstname
@@ -60,7 +78,7 @@ Window {
                 width:text.width
                 height: balance1.height
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: session.get_data_from_clients_table("acountbalance")+" PLN"
+                text: session.get_data_from_clients_table("AccountBalance")+" PLN"
                 font.pixelSize:height
                 color: "#eae9e9"
             }
@@ -112,6 +130,12 @@ Window {
                             parent.opacity+=0.3
                         }
                         onClicked: {
+
+                            formtype = Qt.createQmlObject('import QtQuick 2.12;import Transfer 1.0; Transfer{id:transfer;}',
+                                                          mainpage,"mainform.qml")
+                            formcontent="qrc:/qml/transferform.qml"
+                            formcontent_nav="qrc:/qml/transfer_form_nav.qml"
+                            mainpage.source = "qrc:/qml/mainform.qml"
 
                         }
                     }
@@ -196,6 +220,12 @@ Window {
 
 
 
+    Label{
+        anchors.bottom: transferlist.top
+        text: "Recent transfer:"
+        height: balance1.height*1.5
+        width: transferlist.width
+    }
 ListView {
     id: transferlist
     anchors.top:generallinforec.bottom
@@ -208,13 +238,13 @@ ListView {
 
 
     model: Transfer_list{
+        id:transferlistmodel
        client_transfer_data:session.gettransfers()
       }
 
     delegate: Rectangle {
         width: parent.width
         height: balance1.height*1.5
-        //anchors.fill: parent
         Rectangle {
             width: parent.width
             height: 2
@@ -222,21 +252,21 @@ ListView {
         }
 
         Text {
-            id:datetxt
-
-            text: "-" + model.transferamount + "PLN"
+            id:amount
+            color: model.transferamount[0]==="-" && model.transferamount !== ""  ? "red" : "green"
+            text: model.transferamount !== "" ? model.transferamount + "PLN" : "Make your first transfer"
             anchors.verticalCenter: parent.verticalCenter
         }
         Text {
-            anchors.left: datetxt.right
+            anchors.left:   amount.right
             anchors.leftMargin: 10
 
-            text: "Titile: " + model.transfername
+            text:  model.transfername !== "" ? "Titile: " + model.transfername : ""
             anchors.verticalCenter: parent.verticalCenter
             font.bold: true
         }
         Text {
-            text: "Date: " + model.Date
+            text: model.Date !== "" ? "Date: " + model.Date : ""
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             font.bold: true
@@ -246,8 +276,9 @@ ListView {
     }
 
 }
-}
 
+
+}
 
 
 

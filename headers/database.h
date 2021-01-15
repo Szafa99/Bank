@@ -14,7 +14,7 @@
 
 class Data_base
 {
-//b    friend class Transfer_list;
+
     friend class Session;
     friend class Login;
 
@@ -37,24 +37,24 @@ private: //fields
         QString db_Name;
         QString db_Engine;
 
+public:
+        Data_base(Data_base const&)=delete;
+        void operator=(Data_base const&)=delete;
+        static Data_base &get_instance();
 
 public: //methods
         bool validet_user(const QString &username,const QString &pin,QString &clientid);
-        bool get_client_id();
-        Data_base(Data_base const&)=delete;
-        void operator=(Data_base const&)=delete;
-
-        static Data_base &get_instance(){
-            static Data_base instance("localhost","root","","bank_clients","QMYSQL");
-            return instance;
-        };
-        bool add_client(QVariantMap data,dbtables table);
-
-private: //methods
-      QVector<QVariantMap> set_clients_transfers(QString clientid);
-      QString getclient_data(QString data, dbtables table,QString client_id)const;
+        bool insert_record(QVariantMap data,dbtables table);
+        bool check_if_data_exist(const QString &data,const QString& formName,dbtables table);
+        bool updatedata(const QString &formname,const QString &newdata,dbtables table,const QString &id);
+        QVector<QString> getcolumnnames(dbtables table);
+        QVector<QVariantMap> set_clients_transfers(QString clientid);
+        QString getclient_data(QString formname, dbtables table,QString client_id)const;
+        QString getclient_data(const QString &formname, dbtables table, const QString& formname2,const QString& formdata)const;
 
 };
+
+
 
 Q_DECLARE_METATYPE(QSqlField)
 #endif // Data_base_H

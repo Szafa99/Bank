@@ -17,7 +17,7 @@ Item{
         id:form
         activeFocusOnTab: true
         anchors.fill: parent
-        anchors.margins: 10
+
         spacing: form_spacing
         Rectangle{
             property string bordercolor: "lightgrey"
@@ -227,17 +227,7 @@ Item{
                 }
             }
         }
-        Text{
-            id: errorinfo
-            width: parent.width
-            fontSizeMode: Text.horizontalAlignment
-            font.bold:true
-            height: input_height*input_rec_scale
-            color: "red"
 
-            text: Form.get_error_info()
-
-        }
     }
 
 }

@@ -1,22 +1,11 @@
-
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-import QtQuick.Window 2.12
+import Register 1.0
 
 
 
-Window {
+Item {
     id:root
-    minimumHeight: 180
-    minimumWidth: 340
-    width: 640
-    height: 480
-
-    visible: true
-    color:"black"
-    title: qsTr("Log in")
-
-
 
 
 
@@ -170,7 +159,6 @@ Window {
             z:1
             border.color: "red"
             width: root.width/2.2
-            //            height: root.height-root.height/3
 
             Text {
                 id: login_error_msg
@@ -362,12 +350,22 @@ Window {
             {
                 id : register_area
                 anchors.fill: parent
-                onClicked:  mainpage.source="qrc:/qml/registerfrom.qml"
+                onClicked:{
+                    formtype = Qt.createQmlObject('import Register 1.0; Register{id:register;}',
+                                                  mainpage,"mainform.qml")
+
+                    formcontent= "qrc:/qml/user_info_form.qml"
+                    formcontent_nav= "qrc:/qml/first_form_nav.qml"
+                    mainpage.source="qrc:/qml/mainform.qml"
+                    }
+
+
+                }
 
             }
         }
     }
-}
+
 
 
 

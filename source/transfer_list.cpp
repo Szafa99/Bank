@@ -17,19 +17,19 @@ int Transfer_list::rowCount(const QModelIndex &parent) const
 QVariant Transfer_list::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || mclient_transfer_data.empty() ){
-        qDebug()<<"Couldn't load transferdata";
-        return QVariant();
+        qDebug()<<"Couldn't load transferlist";
+        return "";
     }
 
         QVariantMap transfer = mclient_transfer_data[index.row()];
         switch (role) {
         case transferamount:{
 
-              return transfer["Transfer_amount"];
+              return transfer["TransferAmount"]  ;
         }
         case transfername:
         {
-           return transfer["Title"];
+           return  transfer["Title"];
         }
         case Date:
         {

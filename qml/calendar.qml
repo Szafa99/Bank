@@ -32,17 +32,13 @@ Item{
             onActiveFocusChanged:Form.setForm({"BirthDay":day.text+"-"+month.text+"-"+year.text},Cell_action.Data_changed)
 
         }
-//        Connections{
-//        target: nextmousearea
-//        onClicked:Form.setForm({"BirthDay":day.text+"-"+month.text+"-"+year.text},Cell_action.Data_changed)
-//        }
 
 
 
 
     Row{
         id: myrow
-     //   objectName: "BirthDay"
+
         anchors.fill: parent
 
 
@@ -125,3 +121,4 @@ Item{
 
     }
 }
+

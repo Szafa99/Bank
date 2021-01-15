@@ -3,16 +3,10 @@
 
 
 Register::Register(QObject *parent):QObject(parent),
-    form(&Form::getInstance())
+  form(FormFactory::getInstance().CreateForm("Form"))
 {
-    form->mform.insert("FirstName", "FirstName" );
-    form->mform_edited.insert("FirstName", false );
 
-    form->mform.insert("SecondName","SecondName");
-    form->mform_edited.insert("SecondName",false);
-
-    form->mform.insert("Email","Email");
-    form->mform_edited.insert("Email",false);
+    form->setmodel(Data_base::dbtables::clients);
 
     form->mform.insert("Pesel","Pesel");
     form->mform_edited.insert("Pesel",false);
@@ -21,8 +15,6 @@ Register::Register(QObject *parent):QObject(parent),
     form->mform.insert("BirthPlace","BirthPlace");
     form->mform_edited.insert("BirthPlace",false);
 
-    form->mform.insert("BirthDay","BirthDay");
-    form->mform_edited.insert("BirthDay",false);
 
     form->mform.insert("CitizenShip","CitizenShip");
     form->mform_edited.insert("CitizenShip",false);
@@ -30,29 +22,19 @@ Register::Register(QObject *parent):QObject(parent),
     form->mform.insert("MotherName","MotherName");
     form->mform_edited.insert("MotherName",false);
 
-    form->mform.insert("City", "City" );
-    form->mform_edited.insert("City", false );
 
     form->mform.insert("StreetName","StreetName");
     form->mform_edited.insert("StreetName",false);
 
-    form->mform.insert("HouseNumber","HouseNumber");
-    form->mform_edited.insert("HouseNumber",false);
-
-    form->mform.insert("PostalCode","PostalCode");
-    form->mform_edited.insert("PostalCode",false);
-
-    form->mform.insert("Password","Password");
-    form->mform_edited.insert("Password",false);
 
     form->mform.insert("CheckPassword","CheckPassword");
     form->mform_edited.insert("CheckPassword",false);
 
-    form->mform.insert("Pin","Pin");
-    form->mform_edited.insert("Pin",false);
 
     form->mform.insert("CheckPin","CheckPin");
     form->mform_edited.insert("CheckPin",false);
+
+    form->mform["BirthDay"]="dd-mm-yyyy";
 
 
 }
@@ -63,7 +45,12 @@ Register::Register(QObject *parent):QObject(parent),
 
 bool Register::register_user()
 {
-    return Data_base::get_instance().add_client(form->mform,Data_base::clients) ;
+    if( Data_base::get_instance().insert_record(form->mform,Data_base::clients))
+    {
+        return true;
+    }
+       else return false;
+
 }
 
 
@@ -151,7 +138,7 @@ bool Register::validet_input()
                 }
 
                    else if(
-                        (i.key().contains("Check") && !check_match(i.key()) ) || //checking if forms that need matches actually match
+                        (i.key().contains("Check") && !check_match(i.value()) ) || //checking if forms that need matches actually match
                         (i.key()=="Email" && !validate_email(i.value())     )  || // checking email
                         (i.key()=="Pin" && !validate_pin(i.value())         ) ||//checking pin
                         (i.key()=="Password" && !validate_password(i.value()))||//checking if password is valid
