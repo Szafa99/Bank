@@ -11,10 +11,10 @@ Item{
 
 
 
-    Connections{
-        target: Form
-        onError_infoChanged:{errorinfo.text=Form.get_error_info();console.log("errorChanged")}
-    }
+//    Connections{
+//        target: Form
+//        onError_infoChanged:{errorinfo.text=Form.get_error_info();console.log("errorChanged")}
+//    }
     Column{
 
         id:form

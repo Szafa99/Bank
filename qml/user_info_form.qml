@@ -8,11 +8,11 @@ Item{
     property double input_rec_scale: 1.2
 
 
-    Connections{
-        target: Form
-        onError_infoChanged:errorinfo.text=Form.get_error_info();
+//    Connections{
+//        target: Form
+//        onError_infoChanged:errorinfo.text=Form.get_error_info();
 
-    }
+//    }
 
     Column{
 

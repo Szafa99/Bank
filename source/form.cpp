@@ -1,12 +1,18 @@
 #include "headers/form.h"
+void Form::forcedInput(const QVariant &value, const QString &key)
+{
+    mform[key]=value.toString();
+    emit formChanged();
+}
+
 void Form::setForm(const QVariantMap &formcell,Action_on_cell action)
 {
 
     QString key=formcell.firstKey();
 
     if(registergui!=NULL){
-
         QQuickItem *cell = registergui->findChild<QQuickItem*>(key) ;
+
         lastcell=cell;
           bool overwriteMode = cell->property("overwriteMode").toBool();
 
@@ -17,19 +23,21 @@ void Form::setForm(const QVariantMap &formcell,Action_on_cell action)
             if(formcell[key].isNull())return;
             mform[key]=formcell[key];
 
+            // if formcell is empty or user edited it in such a way that it matches the default value,
+            // the formcell is marked as not edited
             if( mform[key].isNull() || mform[key]==key)
             {
                 mform_edited[key]=false;
                 emit form_editedChanged();
             }
+            // otherwise the formcell is marked as edited
             else
             {
                 mform_edited[key]=true;
                 emit form_editedChanged();
             }
 
-            if(key=="TransferAmount")
-                qDebug()<<mform[key];
+
         }
             break;
         case Action_on_cell::Clicked:

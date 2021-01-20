@@ -11,7 +11,6 @@
 
 
 
-
 class Data_base
 {
 
@@ -24,7 +23,9 @@ private:
 public:
       enum dbtables{
          clients=1,
-         client_payments
+         client_payments,
+         currency_accounts,
+          currencys
      };
 
     ~Data_base();
@@ -46,12 +47,14 @@ public: //methods
         bool validet_user(const QString &username,const QString &pin,QString &clientid);
         bool insert_record(QVariantMap data,dbtables table);
         bool check_if_data_exist(const QString &data,const QString& formName,dbtables table);
+        bool check_if_data_exist(const QString &data,const QString& formName,dbtables table,const QString & clientid);
         bool updatedata(const QString &formname,const QString &newdata,dbtables table,const QString &id);
         QVector<QString> getcolumnnames(dbtables table);
         QVector<QVariantMap> set_clients_transfers(QString clientid);
         QString getclient_data(QString formname, dbtables table,QString client_id)const;
         QString getclient_data(const QString &formname, dbtables table, const QString& formname2,const QString& formdata)const;
-
+        QStringList getcolumn(const QString &columname,dbtables table,const QString & clientid);
+        QStringList getcolumn(const QString &columname,dbtables table);
 };
 
 

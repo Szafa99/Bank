@@ -9,18 +9,23 @@
 #include <headers/form.h>
 #include <headers/formfactory.h>
 #include <headers/transfer.h>
- QString Session::client_id=0;
+#include <headers/currency_list.h>
+#include <headers/currencyaccountform.h>
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
     qmlRegisterType<Transfer_list>("Transfer_list",1,0,"Transfer_list");
-
+    qmlRegisterType<Currency_list>("Currency_list",1,0,"Currency_list");
 
     qRegisterMetaType<QVector<QVariantMap>>("transfertype");
     qRegisterMetaType<Form::Action_on_cell>("Action_on_cell");
+
+
     qmlRegisterType<Transfer>("Transfer",1,0,"Transfer");
     qmlRegisterType<Register>("Register",1,0,"Register");
+    qmlRegisterType<CurrencyAccountForm>("CurrencyAccountForm",1,0,"CurrencyAccountForm");
 
     qmlRegisterUncreatableType<Form>("Action_enum", 1, 0, "Cell_action",
                                             "Not creatable as it is an enum type.");

@@ -1,5 +1,7 @@
 #include "headers/session.h"
 
+QString Session::client_id=0;
+
 Session::Session(QObject *parent) : QObject(parent),
     db(&Data_base::get_instance())
 {}

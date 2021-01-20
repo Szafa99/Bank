@@ -8,6 +8,7 @@
 
 
 
+
 class Data_base;
 class Session : public QObject
 {

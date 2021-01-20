@@ -8,13 +8,14 @@ Window{
     id:mainprog
     title: "Bank"
     visible: true
-    minimumHeight: 180
-    minimumWidth: 340
-    width: 640
-    height: 480
+    minimumHeight: 380
+    minimumWidth: 540
+    width: 840
+    height: 680
     property string formcontent
     property string formcontent_nav
     property QtObject formtype
+    property QtObject currencys
 
         Loader{
 
@@ -22,7 +23,7 @@ Window{
          id:mainpage
 
          focus:true
-         source: "qrc:/qml/login.qml"
+         source: "qrc:/qml/mainwindow.qml"
      }
 
 

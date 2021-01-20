@@ -6,11 +6,11 @@ import Transfer_list 1.0
 import Transfer 1.0
 
 
+
 Item {
     id:root
     anchors.fill: parent
-
-
+    property bool currencychoosen: false
     Rectangle{
         id:generallinforec
         anchors.top: parent.top
@@ -25,12 +25,39 @@ Item {
             anchors.fill:parent
             spacing: height/14
             anchors.margins: spacing
+            Row{
+                height: parent.height*0.2
+                width: parent.width
+            Image{
+            id:listcaller
+            anchors.left: parent.left
+            height: parent.height*0.8
+            width: height
+            source: "../images/call_list.jpg"
+            MouseArea{
+            anchors.fill: parent
+            onClicked: {
+                if(!currencychoosen){
+                    currencychoosen=true
+                     currencys = Qt.createQmlObject('import Currency_list 1.0;Currency_list{id:list;}',mainpage,"allcurrencys.qml")
+                }
+                listloader.source == "" ? listloader.source="qrc:/qml/currencyaccounts.qml" : listloader.source = ""
+            }
+
+            }
+            }
+            Loader{
+             id:listloader
+             anchors.top: listcaller.bottom
+             width: root.width*0.3
+             height: root.height*0.1
+            }
             Rectangle{
                 anchors.right: parent.right
                 id: backtologin
 
                 width: parent.width*0.1
-                height: parent.height*0.2
+                height: parent.height
                 color: backtologinarea.pressed ? "darkred" : "red"
                 radius:10
                 Text{
@@ -49,6 +76,8 @@ Item {
                     }
                 }
             }
+}
+
 
             Text {
                 id: firstname
@@ -168,6 +197,14 @@ Item {
                             parent.opacity+=0.3
                         }
                         onClicked: {
+                            formtype = Qt.createQmlObject('import CurrencyAccountForm 1.0;CurrencyAccountForm{id:accountform;}',
+                                                          mainpage,"mainform.qml")
+                            currencys = Qt.createQmlObject('import Currency_list 1.0;Currency_list{id:list;}',mainpage,"allcurrencys.qml")
+                            currencys.setallcurrency()
+                            currencys.modelReset()
+                            formcontent="qrc:/qml/currency_account_form.qml"
+                            formcontent_nav="qrc:/qml/accountcreation_nav.qml"
+                            mainpage.source = "qrc:/qml/mainform.qml"
 
                         }
                     }
@@ -233,7 +270,7 @@ ListView {
     anchors.horizontalCenter: parent.horizontalCenter
     width: generallinforec.width-10
     height:generallinforec.height*1.5
-
+    clip:true
 
 
 

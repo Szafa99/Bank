@@ -11,6 +11,7 @@ class Form: public QObject
     friend class Register;
     friend class Transfer;
     friend class FormFactory;
+    friend class CurrencyAccountForm;
 
     Q_OBJECT
     Q_ENUMS(Action_on_cell)
@@ -32,6 +33,7 @@ public:
     };
 public slots:
 
+    void forcedInput(const QVariant &value,const QString &key);
     void setForm( const QVariantMap & value,Action_on_cell action);
     QVariant get_form_cell(QString key);
     QVariant get_error_info();

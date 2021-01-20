@@ -47,7 +47,7 @@ public slots:
 
 
     // Add data:
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
     virtual QHash<int,QByteArray> roleNames() const override;
 

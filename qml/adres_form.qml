@@ -8,10 +8,10 @@ Item{
     property int form_spacing:form.height/18
     property double input_rec_scale: 1.2
 
-    Connections{
-        target: Form
-        onError_infoChanged:{errorinfo.text=Form.get_error_info();console.log("errorChanged")}
-    }
+//    Connections{
+//        target: Form
+//        onError_infoChanged:{errorinfo.text=Form.get_error_info();console.log("errorChanged")}
+//    }
     Column{
 
         id:form

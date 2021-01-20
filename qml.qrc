@@ -17,5 +17,15 @@
         <file>qml/mainform.qml</file>
         <file>qml/user_info_form.qml</file>
         <file>qml/calendar.qml</file>
+        <file>qml/allcurrencys.qml</file>
+        <file>qml/currency_account_form.qml</file>
+        <file>images/call_list.jpg</file>
+        <file>images/GBP.jpg</file>
+        <file>images/USD.jpg</file>
+        <file>images/EUR.jpg</file>
+        <file>images/PLN.jpg</file>
+        <file>images/check.jpg</file>
+        <file>qml/accountcreation_nav.qml</file>
+        <file>qml/currencyaccounts.qml</file>
     </qresource>
 </RCC>

@@ -7,7 +7,10 @@ import Register 1.0
 Item {
     id:root
     anchors.fill: parent
-
+    Connections{
+        target: Form
+        onError_infoChanged:{errorinfo.text=Form.get_error_info();console.log("errorChanged")}
+    }
     Rectangle{
         id:border_rec
         anchors.fill: parent
