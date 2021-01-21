@@ -27,5 +27,7 @@
         <file>images/check.jpg</file>
         <file>qml/accountcreation_nav.qml</file>
         <file>qml/currencyaccounts.qml</file>
+        <file>qml/exchange.qml</file>
+        <file>qml/exchangenav.qml</file>
     </qresource>
 </RCC>

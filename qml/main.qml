@@ -23,7 +23,7 @@ Window{
          id:mainpage
 
          focus:true
-         source: "qrc:/qml/mainwindow.qml"
+         source: "qrc:/qml/login.qml"
      }
 
 

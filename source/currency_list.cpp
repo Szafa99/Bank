@@ -10,9 +10,19 @@ setList();
 
 }
 
-int Currency_list::getactivecurrency() const
+int Currency_list::getactivecurrencyindex() const
 {
     return choosenCurrency;
+}
+
+double Currency_list::getcurrencyconverter()
+{
+    return list.first().converter;
+}
+
+Currency Currency_list::getacivecurrency()
+{
+    return list.first();
 }
 
 QString Currency_list::getcurrencyName() const
@@ -138,5 +148,6 @@ void Currency_list::setallcurrency()
 
 
 }
+
 
 

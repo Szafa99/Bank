@@ -12,6 +12,7 @@ class Form: public QObject
     friend class Transfer;
     friend class FormFactory;
     friend class CurrencyAccountForm;
+    friend class Exchange;
 
     Q_OBJECT
     Q_ENUMS(Action_on_cell)

@@ -7,12 +7,13 @@ Item {
     id:root
     anchors.fill: parent
     z:2
-    property string accountnumber:Form.get_form_cell("AccountNumber")
+
     // ============== MASKS
     Connections{
         target: currencys
         onChoosencurrencyChanged:{
             currencys.modelReset()
+            session.setcurrency(currencys.getacivecurrency())
         }
     }
 
@@ -73,6 +74,7 @@ Item {
                 }
                 onClicked: {
                     currencys.setactivecurrency(index)
+
                 }
 
                 }

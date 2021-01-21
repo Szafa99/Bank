@@ -10,7 +10,9 @@
 #include <headers/formfactory.h>
 #include <headers/transfer.h>
 #include <headers/currency_list.h>
+#include <headers/currency.h>
 #include <headers/currencyaccountform.h>
+#include <headers/exchange.h>
 
 int main(int argc, char *argv[])
 {
@@ -18,9 +20,12 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     qmlRegisterType<Transfer_list>("Transfer_list",1,0,"Transfer_list");
     qmlRegisterType<Currency_list>("Currency_list",1,0,"Currency_list");
+    qmlRegisterType<Exchange>("Exchange",1,0,"Exchange");
 
     qRegisterMetaType<QVector<QVariantMap>>("transfertype");
     qRegisterMetaType<Form::Action_on_cell>("Action_on_cell");
+    qRegisterMetaType<Currency>("currency");
+
 
 
     qmlRegisterType<Transfer>("Transfer",1,0,"Transfer");
