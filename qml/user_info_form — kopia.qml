@@ -61,14 +61,14 @@ Item{
                 objectName: "SecondName"
                 activeFocusOnTab: true
                 anchors.fill: parent
-                text: Form.get_form_cell("SecondName")
                 font.pixelSize: input_height
                 color: "grey"
 
+                text: Form.get_form_cell("SecondName")
                 onTextChanged: Form.setForm({"SecondName":text},Cell_action.Data_changed )
                 onActiveFocusChanged: {
                     if(activeFocus)
-                        Form.setForm({"SecondName":parent.text},Cell_action.Clicked)
+                        Form.setForm({"SecondName":text},Cell_action.Clicked)
                     else
                         Form.setForm({"SecondName":text},Cell_action.Editing_Finished)
                 }

@@ -29,5 +29,7 @@
         <file>qml/currencyaccounts.qml</file>
         <file>qml/exchange.qml</file>
         <file>qml/exchangenav.qml</file>
+        <file>qml/Currency_exchange_input.qml</file>
+        <file>qml/Currency_exchange_output.qml</file>
     </qresource>
 </RCC>

@@ -16,7 +16,7 @@ class Transfer: public QObject
     ~Transfer();
 public slots:
 
-
+    QString getheader(){return "Make a transfer";}
     bool make_transfer();
     bool validet_input();
 private:

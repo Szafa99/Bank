@@ -14,7 +14,7 @@ Item {
         onChoosencurrencyChanged:{
             currencys.hidelist()
             currencys.modelReset()
-            listsize=currencys.rowCount(currencys.parent)
+            //listsize=currencys.rowCount(currencys.parent)
             Form.forcedInput(currencys.getcurrencyName(),"Currency")
             Form.forcedInput(currencys.getcurrencyName() + " " + accountnumber,"AccountNumber" )
         }
@@ -58,11 +58,10 @@ Item {
 
             delegate: Rectangle {
                 id: currencyrec
-//                objectName: "dd"+model.index
+
                 z:2
                 width: currencylist.width
-                //height: root.height/currencys.rowCount(parent)
-                height: root.height/3
+                height: root.height/list_el_displayed
                 color: index==0 ? "#acd3e8" :"white" //handle logic later
 
 

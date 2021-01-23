@@ -16,7 +16,8 @@ Window{
     property string formcontent_nav
     property QtObject formtype
     property QtObject currencys
-
+    property QtObject users_currencys
+    property int list_el_displayed: 3
         Loader{
 
         anchors.fill: parent

@@ -54,8 +54,9 @@ Item{
             id:backtologinarea
             anchors.fill: parent
             onClicked: {
-                if(false)
+                if(formtype.validate(users_currencys.getactivecurrency().amount))
                 {
+                    formtype.exchange(users_currencys.getactivecurrency() , currencys.getactivecurrency())
                     formtype.destroy()
                     mainpage.source="qrc:/qml/mainwindow.qml"
                 }

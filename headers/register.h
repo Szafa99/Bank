@@ -1,7 +1,7 @@
 #ifndef REGISTER_H
 #define REGISTER_H
 #include <QRegularExpression>
-
+#include <QRandomGenerator>
 #include "formfactory.h"
 #include "form.h"
 
@@ -18,9 +18,10 @@ public:
 public slots:
     bool register_user();
     bool validet_input();
+     QString getheader(){return "Join BankName";}
 private:
     Form *form=NULL;
-
+    QString generateAccountnumber();
 
 public:
     bool validate_email(const QVariant&);

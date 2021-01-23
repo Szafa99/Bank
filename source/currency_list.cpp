@@ -15,23 +15,16 @@ int Currency_list::getactivecurrencyindex() const
     return choosenCurrency;
 }
 
-double Currency_list::getcurrencyconverter()
-{
-    return list.first().converter;
-}
 
-Currency Currency_list::getacivecurrency()
+
+Currency Currency_list::getactivecurrency()
 {
     return list.first();
 }
 
-QString Currency_list::getcurrencyName() const
-{
-    return list.first().type;
-}
 
 
-
+// call to hide or unhide list
 bool Currency_list::hidelist()
 {
     return displayonelement=!displayonelement;
@@ -44,9 +37,9 @@ void Currency_list::setactivecurrency(const int& newcurrency)
         choosenCurrency=newcurrency;
         swapRows(choosenCurrency,0);
         }
-        currecychoosen=true;
+    emit choosencurrencyChanged();
 
-        emit choosencurrencyChanged();
+
 
 }
 
@@ -81,10 +74,10 @@ QVariant Currency_list::data(const QModelIndex &index, int role) const
     return list.at(index.row()).type;
     }break;
 
-    case CONVERTER:
-    {
+    case CONVERTER:{
         return list.at(index.row()).converter;
     }break;
+
     default:return "";
     }
 
@@ -98,38 +91,42 @@ QHash<int, QByteArray> Currency_list::roleNames() const
     roles[TYPE]="type";
     roles[CONVERTER]="converter";
     return roles;
-
 }
 
 void Currency_list::swapRows(const int &sourceindex, const int &destindex)
 {
     list.swapItemsAt(sourceindex,destindex);
-
 }
 
 
-
+// This method sets a list of currency accounts of the user
 void Currency_list::setList()
 {
-    QString clientid = "2";//Session::getclientId();
-
+    QString clientid = Session::getclientId();
     Currency currency;
     Data_base *db=&Data_base::get_instance();
+
+    //First the minor account of the user is inserted into the list
     currency.amount = db->getclient_data("AccountBalance",Data_base::clients,clientid);
     list.push_back(currency);
 
+    // Then the currency accounts of the user are inserted into the list
         QStringList amount = db->getcolumn("AccountBalance",Data_base::currency_accounts,clientid);
         QStringList type = db->getcolumn("Currency",Data_base::currency_accounts,clientid);
-       for(int i=0; i<type.size();i++ )
+
+        for(int i=0; i<type.size();i++ )
          {
             currency.amount=amount.at(i);
             currency.type=type.at(i);
+            // return the exchangerate of the given currency
+            currency.converter=db->getclient_data("ExchangeRate",Data_base::currencys,"Currency",type.at(i)).toDouble();
             currency.filePath="../images/"+currency.type+".jpg";
             list.push_back(currency);
          }
 
 }
 
+// this methods sets a list of alll currencys available in the database
 void Currency_list::setallcurrency()
 {
         list.clear();

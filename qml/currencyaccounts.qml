@@ -11,9 +11,9 @@ Item {
     // ============== MASKS
     Connections{
         target: currencys
-        onChoosencurrencyChanged:{
+        function onChoosencurrencyChanged(){
             currencys.modelReset()
-            session.setcurrency(currencys.getacivecurrency())
+            session.setcurrency(currencys.getactivecurrency())
         }
     }
 

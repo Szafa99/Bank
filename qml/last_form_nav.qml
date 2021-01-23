@@ -28,8 +28,8 @@ Item{
                 anchors.fill: parent
                 onClicked: {
                     Form.update()
-                    formcontent="qrc:/qml/first_form_nav.qml"
-                    formcontent_nav="qrc:/qml/user_info_form.qml"
+                    formcontent_nav="qrc:/qml/first_form_nav.qml"
+                    formcontent="qrc:/qml/user_info_form.qml"
                 }
             }
         }
@@ -73,10 +73,11 @@ Item{
                 anchors.fill: parent
                 onClicked: {
                       Form.update()
-                  if(formtype.validet_input() && formtype.register_user() )
+                  if(formtype.validet_input() && formtype.register_user() ){
 
                       formtype.destroy()
                      mainpage.source="qrc:/qml/login.qml"
+                  }
                     }
             }
         }

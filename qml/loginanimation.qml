@@ -8,8 +8,10 @@ Item {
     anchors.fill: parent
 
     Connections{
-    target: logoanim
-    onFinished:mainpage.source="qrc:/qml/mainwindow.qml";
+        target: logoanim
+        function onFinished(){
+            mainpage.source="qrc:/qml/mainwindow.qml";
+        }
     }
 
     SequentialAnimation{

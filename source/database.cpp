@@ -26,6 +26,17 @@ Data_base::~Data_base()
 }
 
 
+QString Data_base::tableNames(const dbtables &tablename)const
+{
+    QHash<int,QString> table;
+    table[clients]="clients";
+    table[currencys]="currencys";
+    table[currency_accounts]="currency_accounts";
+    table[client_payments]="clients_payments";
+    return table[tablename];
+}
+
+
 bool Data_base::validet_user(const QString &username, const QString &pin, QString &clientid)
 {
 
@@ -82,23 +93,10 @@ QVector<QString> Data_base::getcolumnnames(Data_base::dbtables table)
     QVector<QString> columnkeys;
     QSqlRecord myrecord;
 
-    switch (table)
-    {
-    case dbtables::client_payments: {
-        myrecord= clientdb.driver()->record("clients_payments");
-    }
-        break;
-    case dbtables::clients: myrecord= myrecord= clientdb.driver()->record("clients");
-        break;
-    case dbtables::currency_accounts: myrecord= myrecord= clientdb.driver()->record("currency_accounts");
-        break;
-    default:
-    {
-        qCritical()<<"Didn't find table in " + db_Name;
-        return {""};
-    }
-    }
+    myrecord= clientdb.driver()->record(tableNames(table));
     columnkeys.reserve(myrecord.count());
+
+
     for(int i=0;i<myrecord.count();i++)
         columnkeys.push_back( myrecord.fieldName(i)) ;
 
@@ -112,30 +110,26 @@ QVector<QString> Data_base::getcolumnnames(Data_base::dbtables table)
 QString Data_base::getclient_data(QString data, dbtables table,QString client_id) const
 {
     QSqlQuery myquery;
-    if(table == clients)
-        myquery.prepare( "SELECT " + data + " FROM clients WHERE id = " + client_id );
-    else if(table==client_payments)
-        myquery.prepare( "SELECT " + data + " FROM clients_payments WHERE id = " + client_id );
+       myquery.prepare( "SELECT " + data + " FROM " + tableNames(table) + " WHERE id = " + client_id );
 
 
     if(myquery.exec())
-    {
         while(myquery.next())
             return (myquery.value(0).toString());
-    }
-    else qDebug()<<"Couldn't fetch data about:" << data << " : " << myquery.lastError();
+
+    else qDebug()<<"IN getclient_data COLUDN'T FETCH DATA ABOUT:" << data << " : " << myquery.lastError();
     return QString::Null();
 
 }
+
+
+
 
 QString Data_base::getclient_data(const QString &data, dbtables table, const QString& formname,const QString& formdata) const
 {
     QSqlQuery myquery;
     QString temp;
-    if(table == clients)
-        myquery.prepare( "SELECT `" + data + "` FROM `clients` WHERE `" + formname + "` = '"+ formdata+"'" );
-    else if(table==client_payments)
-        myquery.prepare( "SELECT `" + data + "` FROM `clients_payments` WHERE `" + formname + "` = "+ formdata );
+    myquery.prepare( "SELECT `" + data + "` FROM `" + tableNames(table) + "` WHERE `" + formname + "` = '"+ formdata+"'" );
 
 
     if(myquery.exec())
@@ -143,7 +137,7 @@ QString Data_base::getclient_data(const QString &data, dbtables table, const QSt
         while(myquery.next())
             return (myquery.value(0).toString());
     }
-    else qDebug()<<"Couldn't fetch data about:" << data << " : " << myquery.lastError();
+    else qDebug()<<"IN getclient_data COLUDN'T FETCH DATA ABOUT:" << data << " : " << myquery.lastError();
     return QString::Null();
 }
 
@@ -151,30 +145,14 @@ QStringList Data_base::getcolumn(const QString &columname, Data_base::dbtables t
 {
     QSqlQuery myquery;
     QStringList columnlist;
+    myquery.prepare("SELECT " + columname + " FROM " +  tableNames(table) +" WHERE id = "+clientid);
 
-switch(table){
-
-    case clients:{
-       myquery.prepare("SELECT " + columname + " FROM clients WHERE id = "+clientid);
-    }break;
-
-    case client_payments:
-    {
-       myquery.prepare("SELECT " + columname + " FROM client_payments WHERE id = "+clientid);
-    }break;
-
-    case currency_accounts:
-    {
-       myquery.prepare("SELECT " + columname + " FROM currency_accounts WHERE id = "+clientid);
-    }break;
-    default:qCritical()<<"Table doesn't exist.";
-}
 
     if(myquery.exec())
         while(myquery.next())
            columnlist.push_back(myquery.value(0).toString());
 
- else qCritical()<<"QUERY ERROR IN GETCOLUMN METHOD: "<<myquery.lastError();
+    else qCritical()<<"QUERY ERROR IN GETCOLUMN METHOD: "<<myquery.lastError();
 
     return columnlist;
 }
@@ -184,27 +162,7 @@ QStringList Data_base::getcolumn(const QString &columname, Data_base::dbtables t
 
     QSqlQuery myquery;
     QStringList columnlist;
-
-switch(table){
-
-    case clients:{
-       myquery.prepare("SELECT " + columname + "FROM clients");
-    }break;
-
-    case client_payments:
-    {
-       myquery.prepare("SELECT " + columname + " FROM client_payments");
-    }break;
-    case currencys:
-    {
-     myquery.prepare("SELECT " + columname + " FROM currencys");
-    }break;
-    case currency_accounts:
-    {
-     myquery.prepare("SELECT " + columname + " FROM currency_accounts");
-    }break;
-    default:qCritical()<<"Table doesn't exist.";
-}
+    myquery.prepare("SELECT " + columname + " FROM "+tableNames(table));
 
     if(myquery.exec())
         while(myquery.next())
@@ -216,31 +174,16 @@ switch(table){
 }
 
 
+
 bool Data_base::check_if_data_exist(const QString &data,const QString& formName, Data_base::dbtables table)
 {
     QSqlQuery myquery;
-    switch (table) {
+    myquery.prepare( "SELECT "+ formName  + " FROM " + tableNames(table) );
 
-    case clients:
-        myquery.prepare( "SELECT "+ formName  + " FROM clients");break;
-    case client_payments:
-        myquery.prepare( "SELECT " + formName + " FROM clients_payments");break;
-    case currencys:
-        myquery.prepare( "SELECT " + formName + " FROM clients_payments");break;
-    case currency_accounts:
-        myquery.prepare( "SELECT " + formName + " FROM clients_payments");break;
-    default: return false;
-    }
-
-
-    if(myquery.exec())
-    {
-        while (myquery.next()){
-            qDebug()<<myquery.value(0);
+    if(myquery.exec()){
+        while (myquery.next())
             if( data == myquery.value(0).toString())return true;
-        }
-        }
-
+    }
     else qCritical()<<" QUERY_ERROR IN CHECK_IF_DATA_EXIST FUNCTION " << myquery.lastError();
     return false;
 
@@ -249,28 +192,13 @@ bool Data_base::check_if_data_exist(const QString &data,const QString& formName,
 bool Data_base::check_if_data_exist(const QString &data,const QString& formName, Data_base::dbtables table,const QString & clientid)
 {
     QSqlQuery myquery;
-    switch (table) {
-
-    case clients:
-        myquery.prepare( "SELECT "+ formName  + " FROM clients WHERE id = " + clientid );break;
-    case client_payments:
-       myquery.prepare( "SELECT "+ formName  + " FROM client_payments WHERE id = " + clientid );break;
-    case currencys:
-       myquery.prepare( "SELECT "+ formName  + " FROM currencys WHERE id = " + clientid );break;
-    case currency_accounts:
-       myquery.prepare( "SELECT "+ formName  + " FROM currency_accounts WHERE id = " + clientid );break;
-    default: return false;
-    }
+        myquery.prepare( "SELECT "+ formName  + " FROM " + tableNames(table) +" WHERE id = " + clientid );
 
 
-    if(myquery.exec())
-    {
-        while (myquery.next()){
-            qDebug()<<myquery.value(0);
+    if(myquery.exec()){
+        while (myquery.next())
             if( data == myquery.value(0).toString())return true;
-        }
-        }
-
+    }
     else qCritical()<<" QUERY_ERROR IN CHECK_IF_DATA_EXIST FUNCTION " << myquery.lastError();
     return false;
 
@@ -281,13 +209,9 @@ bool Data_base::check_if_data_exist(const QString &data,const QString& formName,
 bool Data_base::updatedata(const QString &formname, const QString &newdata, Data_base::dbtables table, const QString &id)
 {
     QSqlQuery myquery;
-    if(table == clients)
-        myquery.prepare( "UPDATE clients SET " + formname +" = " + newdata +" WHERE id = " + id );
-    else if(table == client_payments)
-        myquery.prepare( "UPDATE clients_payments SET " + formname +" = " + newdata +" WHERE id = " + id);
+        myquery.prepare( "UPDATE " + tableNames(table) + " SET " + formname + " = " + newdata +" WHERE id = " + id );
 
-
-    if(myquery.exec())
+     if(myquery.exec())
         return true;
 
     else qDebug()<<"Couldn't update:" << formname << " : " << myquery.lastError();
@@ -298,40 +222,16 @@ bool Data_base::updatedata(const QString &formname, const QString &newdata, Data
 bool Data_base::insert_record(QVariantMap data,dbtables table)
 {
 
-    if(!this->clientdb.isOpen())
-    {
-        qCritical()<<"Database is closed.";
-        return false;
-    }
     QSqlQuery myquery;
     QSqlRecord myrecord;
     QString keys ,values;
     values = " VALUES (";
 
-switch(table){
 
-    case clients:{
-        keys = "INSERT INTO `clients` (";
-        myrecord = clientdb.driver()->record("clients");
-    }break;
+        keys = "INSERT INTO `" + tableNames(table) + "` (";
+        myrecord = clientdb.driver()->record(tableNames(table));
 
-    case client_payments:
-    {
-        keys = "INSERT INTO `clients_payments` (";
-        myrecord = clientdb.driver()->record("clients_payments");
-    }break;
-case currency_accounts:
-{
-    keys = "INSERT INTO `currency_accounts` (";
-    myrecord = clientdb.driver()->record("currency_accounts");
-}break;
-    default:
-    {
-    qCritical()<<"Table doesn't exist.";
-    return false;
-    }
 
-}
 
     // Preapering query which task is to insert a new record
     for(QVariantMap::Iterator i = data.begin(); i!=data.end() ;i++){

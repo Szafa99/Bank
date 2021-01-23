@@ -6,7 +6,7 @@ Login::Login(Session *msession,QObject *parent):
     clientid(""),
     startsession(msession),
     client_db(&Data_base::get_instance() ),
-    pin("pin"),
+    pin("2233"),
     username("martinszafarczyk@gmail.com")
 {
 }
@@ -68,7 +68,8 @@ bool Login::loguserin(const QString &mpin,const QString &musername)
     if(setusername(musername) && setpin(mpin) && client_db->validet_user(musername,mpin,clientid)){
         startsession->client_id=clientid;
         startsession->settransfers();
-
+        startsession->choosencurrency.amount= startsession->get_data_from_clients_table("AccountBalance");
+        startsession->choosencurrency.type= "PLN";
         return true;
     }
 

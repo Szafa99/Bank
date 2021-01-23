@@ -55,6 +55,8 @@ public: //methods
         QString getclient_data(const QString &formname, dbtables table, const QString& formname2,const QString& formdata)const;
         QStringList getcolumn(const QString &columname,dbtables table,const QString & clientid);
         QStringList getcolumn(const QString &columname,dbtables table);
+private:
+        QString tableNames(const dbtables &tablename) const;
 };
 
 

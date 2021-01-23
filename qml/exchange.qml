@@ -4,47 +4,27 @@ import Action_enum 1.0
 
 
 Item{
-
+    id:exchangeroot
     property int input_height: form.height/18
     property int form_spacing:form.height/18
     property double input_rec_scale: 1.2
 
 
-
-        Connections{
-            target: Form
-            onError_infoChanged:{errorinfo.text=Form.get_error_info();console.log("errorChanged")}
+    Connections{
+        target: Form
+       function onError_infoChanged(){
+            errorinfo.text=Form.get_error_info();console.log("errorChanged")
         }
+
+    }
     Column{
 
         id:form
         activeFocusOnTab: true
         anchors.fill: parent
 
-        spacing: form_spacing
-        Rectangle{
+        spacing: form_spacing*3
 
-            id:first_rec
-            height:input_height*input_rec_scale
-            border.color: "grey"
-            width: parent.width
-            border.width: 1
-
-            TextInput{
-                id:amount
-                activeFocusOnTab: true
-                color: "grey"
-                anchors.fill: parent
-                font.pixelSize: input_height
-
-                inputMethodHints:Qt.ImhDigitsOnly
-                inputMask: "00.00"+"PL\\N\\"
-                overwriteMode: true
-                cursorPosition: activeFocus ? 0 : 0
-
-
-            }
-        }
 
 
         Rectangle{
@@ -56,56 +36,97 @@ Item{
             anchors.horizontalCenter: parent.horizontalCenter
             height:input_height*input_rec_scale
             width: parent.width
+            Row{
+                id:input
+                z:110
+                objectName: "Amount"
+                height: parent.height
+                width: parent.width*0.2
+                clip: true
+                anchors{left:parent.left;leftMargin: parent.width*0.1;horizontalCenter: parent.horizontalCenter}
+                spacing: 2
+                TextInput{
+                    id:integers
+                    activeFocusOnTab: true
+
+                    z:110
+                    color: "grey"
+                    font.pixelSize: parent.height
+                    text: "0"
+                    cursorPosition: activeFocus ? 0 : 0
+                    overwriteMode: true
+                    inputMethodHints:Qt.ImhDigitsOnly
+                    onTextChanged: Form.setForm({"Amount":text+"."+doubels.text},Cell_action.Data_changed)
+                }
+                Label{
+                    z:110
+                    color: "grey"
+                    font.pixelSize: parent.height
+                    text: "."
+                    }
+                TextInput{
+                    id:doubels
+                    font.pixelSize: parent.height
+                    activeFocusOnTab: true
+                    z:110
+                    maximumLength:2
+                    color: "grey"
+                    text: "0"
+                    cursorPosition: activeFocus ? 0 : 0
+                    overwriteMode: true
+                    inputMethodHints:Qt.ImhDigitsOnly
+                    onTextChanged: Form.setForm({"Amount":integers.text+"."+text},Cell_action.Data_changed)
+                }
+                Label{
+                    z:110
+                    color: "grey"
+                    font.pixelSize: parent.height
+                    text: " "+users_currencys.getactivecurrency().type
+                    }
+
+            }
 
             Loader{
+
                 id:currencyloader
                 anchors.left: parent.left
-                height: parent.height*3
+                height: parent.height*list_el_displayed
                 width: parent.width
                 z:100
-            }
-            Text{
-                z:1
-                clip: true
-                color: "grey"
-                anchors.centerIn: parent
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: height*0.2
-                height: parent.height*0.8
-                font.pixelSize: height*0.5
-                text: "Choose currencyn"
-            }
+                source: "../qml/Currency_exchange_input.qml"
 
+            }
             MouseArea{
                 id:listcallerarea
                 anchors.fill: parent
-                onClicked: {
-                    currencyloader.source="qrc:/qml/allcurrencys.qml"
-                }
+                onClicked: users_currencys.hidelist()
             }
         }
+
 
         Rectangle{
+            id:choosecurrency
 
-
-            height:input_height*input_rec_scale
+            property string bordercolor: "lightgrey"
             border.color: bordercolor
-            width: parent.width
             border.width: 1
 
-            Text{
-                id:result
-                activeFocusOnTab: true
-                color: "grey"
+            anchors.horizontalCenter: parent.horizontalCenter
+            height:input_height*input_rec_scale
+            width: parent.width
+            Loader{
+                anchors.left: parent.left
+                height: parent.height*list_el_displayed
+                width: parent.width
+                z:99
+                source: "../qml/Currency_exchange_output.qml"
+                focus: true
+            }
+            MouseArea{
                 anchors.fill: parent
-                font.pixelSize: input_height
-
-                text: formtype.getresult("2.00",1)
-
-
+                onClicked: currencys.hidelist()
             }
         }
-
 
     }
 

@@ -106,13 +106,13 @@ Item {
                 width: parent.width/2
                 anchors.centerIn:parent
                 anchors.margins:5
-                source: model.file
+                source:index<=9 ? "" : model.file
             }
             Text{
                 id:button_nr
                 anchors.centerIn:parent
                 color:"black"
-                text:model.number
+                text: index<=9 ? model.number : ""
             }
 
         }
@@ -182,13 +182,16 @@ Item {
                 width: parent.width/2
                 height: parent.height/15
                 color:"lightgrey"
-
+                clip: true
                 TextInput{
                     id:logintxt
-                    readOnly: false
-                    anchors.fill: parent
+
+                    height: parent.height
+                    font.pixelSize: height*0.5
+                    anchors.bottom: parent.bottom
+
                     color:"darkgrey"
-                    clip: true
+
                     text: if(!loginrect.loginmodified) log.getusername()
 
 
@@ -224,7 +227,7 @@ Item {
                     font.pixelSize: height/1.2
                     color:"darkgrey"
                     maximumLength: 4
-                    passwordMaskDelay:200
+                    passwordMaskDelay:1000
                 }
                 MouseArea{
                     anchors.fill: parent

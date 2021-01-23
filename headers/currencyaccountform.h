@@ -14,6 +14,7 @@ public slots:
     bool validateInput();
     void addcurencyaccount();
 
+    QString getheader(){return "Create a currency account";}
 private:
     Form * form=NULL;
     Data_base *db;

@@ -7,10 +7,14 @@ import Register 1.0
 Item {
     id:root
     anchors.fill: parent
-//    Connections{
-//        target: Form
-//        onError_infoChanged:{errorinfo.text=Form.get_error_info();console.log("errorChanged")}
-//    }
+
+    Connections{
+        target: Form
+        function onError_infoChanged(){
+            errorinfo.text=Form.get_error_info();console.log("errorChanged")
+        }
+    }
+
     Rectangle{
         id:border_rec
         anchors.fill: parent
@@ -25,7 +29,7 @@ Item {
             anchors.topMargin: user_interface_rec.y*0.1
             anchors.horizontalCenter: parent.horizontalCenter
             font.pixelSize: height
-            text: "Create account with NameBank"
+            text: formtype.getheader()
         }
 
         Rectangle{

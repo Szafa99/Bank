@@ -14,6 +14,8 @@ Item{
     Connections{
         target: Form
         onFormChanged:accountumber.text=Form.get_form_cell("AccountNumber")
+
+
     }
 
 
@@ -41,7 +43,7 @@ Item{
             Loader{
                 id:currencyloader
                 anchors.left: parent.left
-                height: parent.height*3
+                height: parent.height*list_el_displayed
                 width: parent.width
                 z:100
             }

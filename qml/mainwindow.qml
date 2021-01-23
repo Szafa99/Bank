@@ -13,7 +13,9 @@ Item {
 
     Connections{
         target: session
-        onChoosencurrencyChanged: balance2.text = session.getcurrency().amount + " " + session.getcurrency().type
+        function onChoosencurrencyChanged(){
+            balance2.text = session.getcurrency().amount + " " + session.getcurrency().type
+        }
     }
 
     Rectangle{
@@ -25,11 +27,11 @@ Item {
         color: "#626262"
 
         Column{
-
             id:generallinfo
-            anchors.fill:parent
-            spacing: height/14
             anchors.margins: spacing
+            anchors.fill:parent
+            spacing: parent.height/14
+
             Row{
                 height: parent.height*0.2
                 width: parent.width
@@ -137,6 +139,7 @@ Item {
                     visible: false
                 }
 
+
                 Image {
 
                     id: transfer_image
@@ -176,9 +179,9 @@ Item {
                 }
 
 
-
+//leads to creating currency form
                 Image {
-                    id: menu_image
+                    id: currency_account_img
                     width: balance1.width/8
                     height: width
                     source: "../images/transfersign.png"
@@ -189,7 +192,7 @@ Item {
                     }
                     MouseArea{
                         hoverEnabled: true
-                        id:menu_button
+                        id:currency_account_btn
                         anchors.fill: parent
                         onEntered:{
                             parent.width+=1.5
@@ -215,9 +218,9 @@ Item {
                     }
                 }
 
-
+// leads to exchange money form
                 Image {
-                    id: accountinfo_image
+                    id: exchange_image
                     width: balance1.width/8
                     height: width
                     opacity:1
@@ -230,7 +233,7 @@ Item {
                     }
                     MouseArea{
                         hoverEnabled: true
-                        id:accountinfo_button
+                        id:exchange_button
                         anchors.fill: parent
                         onEntered:{
                             parent.width+=1.5
@@ -245,9 +248,16 @@ Item {
                         onClicked: {
                             formtype = Qt.createQmlObject('import Exchange 1.0;Exchange{id:accountform;}',
                                                           mainpage,"mainform.qml")
-                            currencys = Qt.createQmlObject('import Currency_list 1.0;Currency_list{id:list;}',mainpage,"allcurrencys.qml")
+
+                            currencys = Qt.createQmlObject('import Currency_list 1.0;Currency_list{id:list;}',mainpage,"Currency_exchange_output.qml")
                             currencys.setallcurrency()
+                            currencys.hidelist()
                             currencys.modelReset()
+
+                            users_currencys = Qt.createQmlObject('import Currency_list 1.0;Currency_list{id:list;}',mainpage,"Currency_exchange_input.qml")
+                            users_currencys.hidelist()
+                            users_currencys.modelReset()
+
                             formcontent="qrc:/qml/exchange.qml"
                             formcontent_nav="qrc:/qml/exchangenav.qml"
                             mainpage.source = "qrc:/qml/mainform.qml"
@@ -293,7 +303,7 @@ Item {
         }
 
         delegate: Rectangle {
-            width: parent.width
+            width: transferlist.width
             height: balance1.height*1.5
             Rectangle {
                 width: parent.width

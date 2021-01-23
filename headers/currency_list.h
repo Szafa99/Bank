@@ -30,21 +30,24 @@ public slots:
     virtual QHash<int,QByteArray> roleNames() const override;
 
     void swapRows(const int &sourceindex,const int &destindex);
-
+//==================================================================
     void setactivecurrency(const int& newcurrency);
     int getactivecurrencyindex()const;
-    double getcurrencyconverter();
-    Currency getacivecurrency();
-    QString getcurrencyName()const;
+
+
+
+
+    Currency getactivecurrency();
+
 
     bool hidelist();
+
 signals:
     void choosencurrencyChanged();
 
 private:
     QList<Currency> list;
     int choosenCurrency=-1;
-    bool currecychoosen=false;
     bool displayonelement=false;
 private:
     void setList();
