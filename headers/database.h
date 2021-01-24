@@ -7,6 +7,8 @@
 #include<QtSql/QSqlQuery>
 #include<QtSql/QSqlError>
 #include<QtSql/QSqlField>
+#include <QRandomGenerator>
+
 #include "session.h"
 
 
@@ -49,12 +51,16 @@ public: //methods
         bool check_if_data_exist(const QString &data,const QString& formName,dbtables table);
         bool check_if_data_exist(const QString &data,const QString& formName,dbtables table,const QString & clientid);
         bool updatedata(const QString &formname,const QString &newdata,dbtables table,const QString &id);
+        bool updatedata (const QString &formname, const QString &newdata, Data_base::dbtables table,const QString &datacolumn,const QString & data);
+        bool updatedata (const QString &formname, const QString &newdata, Data_base::dbtables table,const QString &datacolumn,const QString & data,const QString &clientid);
         QVector<QString> getcolumnnames(dbtables table);
         QVector<QVariantMap> set_clients_transfers(QString clientid);
         QString getclient_data(QString formname, dbtables table,QString client_id)const;
         QString getclient_data(const QString &formname, dbtables table, const QString& formname2,const QString& formdata)const;
+        QString getclient_data(const QString &formname, dbtables table, const QString& formname2,const QString& formdata,const QString &clientid )const;
         QStringList getcolumn(const QString &columname,dbtables table,const QString & clientid);
         QStringList getcolumn(const QString &columname,dbtables table);
+        QString generateAccountnumber();
 private:
         QString tableNames(const dbtables &tablename) const;
 };

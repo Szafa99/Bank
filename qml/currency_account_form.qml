@@ -9,13 +9,13 @@ Item{
     property int input_height: form.height/15
     property int form_spacing:form.height/10
     property double input_rec_scale: 1.2
-    property int listsize:currencys.rowCount(currencys.parent)
+
 
     Connections{
         target: Form
-        onFormChanged:accountumber.text=Form.get_form_cell("AccountNumber")
-
-
+        function onFormChanged(){
+            accountumber.text=Form.get_form_cell("AccountNumber")
+        }
     }
 
 
@@ -50,13 +50,12 @@ Item{
             Text{
                 z:1
                 clip: true
-                color: "grey"
-                anchors.centerIn: parent
+
+                anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: height*0.2
                 height: parent.height*0.8
                 font.pixelSize: height*0.5
-                text: "Choose currencyn of your account"
+                text: "Choose the currency of your account"
             }
 
             MouseArea{
@@ -81,8 +80,9 @@ Item{
             Text{
                 id:accountumber
                 objectName: "AccountNumber"
-                color: "grey"
-                anchors.bottomMargin: height*0.2
+
+                font.bold:true
+                anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: parent.bottom
                 height: parent.height*0.8
                 font.pixelSize: height*0.5
@@ -100,10 +100,9 @@ Item{
             border.width: 1
 
             Text{
-                color: "grey"
-                anchors.left: parent.left
+
+                anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: height*0.2
                 height: parent.height*0.8
                 font.pixelSize: height*0.5
                 text: "Add a currencycard to your acccount."

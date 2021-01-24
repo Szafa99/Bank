@@ -30,7 +30,7 @@ public:
 
 
 public slots:
-   Currency getcurrency()const;
+   Currency getcurrency();
 
    void setcurrency(const Currency &newcurrency);
 

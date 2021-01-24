@@ -19,11 +19,15 @@ Data_base::Data_base(QString hostname,QString Username,QString Password,QString 
 }
 
 
+
+
 Data_base::~Data_base()
 {
     clientdb.close();
     qDebug()<<"closing database";
 }
+
+
 
 
 QString Data_base::tableNames(const dbtables &tablename)const
@@ -35,6 +39,30 @@ QString Data_base::tableNames(const dbtables &tablename)const
     table[client_payments]="clients_payments";
     return table[tablename];
 }
+
+
+
+
+QString Data_base::generateAccountnumber()
+{
+    QString accountnumber;
+    QVariant digit;
+   do{
+    for(int i =0;i<4;i++)
+    {
+    digit = QRandomGenerator::global()->bounded(1000, 10000);
+    accountnumber+= " " + digit.toString() ;
+    }
+    }while (
+            check_if_data_exist("PLN" + accountnumber,"AccountNumber",currency_accounts)  &&
+            check_if_data_exist(accountnumber,"AccountNumber",clients)
+            );
+
+
+    return  accountnumber;
+}
+
+
 
 
 bool Data_base::validet_user(const QString &username, const QString &pin, QString &clientid)
@@ -63,6 +91,8 @@ Data_base &Data_base::get_instance()
 }
 
 
+
+
 QVector<QVariantMap> Data_base::set_clients_transfers(QString clientid)
 {
     QVector<QVariantMap> transfers;
@@ -86,6 +116,8 @@ QVector<QVariantMap> Data_base::set_clients_transfers(QString clientid)
     else qDebug()<<"Couldn't load transfers : "<<myquery.lastError();
     return {{{"",""}}};
 }
+
+
 
 
 QVector<QString> Data_base::getcolumnnames(Data_base::dbtables table)
@@ -141,6 +173,28 @@ QString Data_base::getclient_data(const QString &data, dbtables table, const QSt
     return QString::Null();
 }
 
+
+
+
+
+QString Data_base::getclient_data(const QString &data, Data_base::dbtables table, const QString &formname, const QString &formdata, const QString &clientid) const
+{
+    QSqlQuery myquery;
+       myquery.prepare( "SELECT " + data + " FROM " + tableNames(table) + " WHERE " + formname + " = " + formdata + " && id = " + clientid );
+
+
+    if(myquery.exec())
+        while(myquery.next())
+            return (myquery.value(0).toString());
+
+    else qDebug()<<"IN getclient_data COLUDN'T FETCH DATA ABOUT:" << data << " : " << myquery.lastError();
+    return QString::Null();
+}
+
+
+
+
+
 QStringList Data_base::getcolumn(const QString &columname, Data_base::dbtables table, const QString &clientid)
 {
     QSqlQuery myquery;
@@ -156,6 +210,10 @@ QStringList Data_base::getcolumn(const QString &columname, Data_base::dbtables t
 
     return columnlist;
 }
+
+
+
+
 
 QStringList Data_base::getcolumn(const QString &columname, Data_base::dbtables table)
 {
@@ -175,6 +233,7 @@ QStringList Data_base::getcolumn(const QString &columname, Data_base::dbtables t
 
 
 
+
 bool Data_base::check_if_data_exist(const QString &data,const QString& formName, Data_base::dbtables table)
 {
     QSqlQuery myquery;
@@ -188,6 +247,10 @@ bool Data_base::check_if_data_exist(const QString &data,const QString& formName,
     return false;
 
 }
+
+
+
+
 
 bool Data_base::check_if_data_exist(const QString &data,const QString& formName, Data_base::dbtables table,const QString & clientid)
 {
@@ -206,6 +269,7 @@ bool Data_base::check_if_data_exist(const QString &data,const QString& formName,
 
 
 
+
 bool Data_base::updatedata(const QString &formname, const QString &newdata, Data_base::dbtables table, const QString &id)
 {
     QSqlQuery myquery;
@@ -217,6 +281,40 @@ bool Data_base::updatedata(const QString &formname, const QString &newdata, Data
     else qDebug()<<"Couldn't update:" << formname << " : " << myquery.lastError();
     return false;
 }
+
+
+
+
+bool Data_base::updatedata(const QString &formname, const QString &newdata, Data_base::dbtables table,const QString &datacolumn,const QString & data)
+{
+    QSqlQuery myquery;
+        myquery.prepare( "UPDATE " + tableNames(table) + " SET " + formname + " = " + newdata +" WHERE " + datacolumn + " = " + data);
+
+     if(myquery.exec())
+        return true;
+
+    else qDebug()<<"Couldn't update:" << formname << " : " << myquery.lastError();
+     return false;
+}
+
+
+
+
+
+bool Data_base::updatedata(const QString &formname, const QString &newdata, Data_base::dbtables table, const QString &datacolumn, const QString &data, const QString &clientid)
+{
+    QSqlQuery myquery;
+        myquery.prepare( "UPDATE " + tableNames(table) + " SET `" + formname + "` = '" + newdata + "' WHERE `" + datacolumn + "` = '" + data + "' && `id` = '" + clientid+"'");
+
+
+     if(myquery.exec())
+        return true;
+
+    else qDebug()<<"Couldn't update:" << formname << " : " << myquery.lastError();
+     return false;
+}
+
+
 
 
 bool Data_base::insert_record(QVariantMap data,dbtables table)

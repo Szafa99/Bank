@@ -7,7 +7,6 @@ import Transfer 1.0
 Item{
     anchors.fill: parent
 
-    // here is a transfer object created which contains a form object to control the content of this qmlfile
 
 
     Row{

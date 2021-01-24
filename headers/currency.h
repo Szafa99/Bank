@@ -14,7 +14,12 @@ public:
     Q_PROPERTY(QString filePath MEMBER filePath);
     Q_PROPERTY(double converter MEMBER converter);
 
-  //  operator= (const Currency& other);
+    void operator= (const Currency& other){
+        converter = other.converter;
+        amount=other.amount;
+        filePath=other.filePath;
+        type=other.type;
+    };
         double converter;
         QString type;
         QString amount;

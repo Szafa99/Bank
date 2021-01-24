@@ -12,6 +12,13 @@ Item {
     property bool currencychoosen: false
 
     Connections{
+            target:mainpage
+        function onLoaded(){
+        balance2.text = session.getcurrency().amount + " " + session.getcurrency().type
+    }
+    }
+
+    Connections{
         target: session
         function onChoosencurrencyChanged(){
             balance2.text = session.getcurrency().amount + " " + session.getcurrency().type
@@ -25,6 +32,7 @@ Item {
         anchors.right: parent.right
         height: root.height/3
         color: "#626262"
+
 
         Column{
             id:generallinfo
@@ -246,11 +254,10 @@ Item {
                             parent.opacity+=0.3
                         }
                         onClicked: {
-                            formtype = Qt.createQmlObject('import Exchange 1.0;Exchange{id:accountform;}',
+                            formtype = Qt.createQmlObject('import Exchange 1.0;Exchange{id:exchangeform;}',
                                                           mainpage,"mainform.qml")
 
                             currencys = Qt.createQmlObject('import Currency_list 1.0;Currency_list{id:list;}',mainpage,"Currency_exchange_output.qml")
-                            currencys.setallcurrency()
                             currencys.hidelist()
                             currencys.modelReset()
 

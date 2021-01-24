@@ -78,6 +78,7 @@ Item{
                     onTextChanged: Form.setForm({"Amount":integers.text+"."+text},Cell_action.Data_changed)
                 }
                 Label{
+                    id:inputype
                     z:110
                     color: "grey"
                     font.pixelSize: parent.height

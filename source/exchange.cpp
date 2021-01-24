@@ -5,11 +5,12 @@ Exchange::Exchange(QObject *parent) : QObject(parent),
     form(FormFactory::getInstance().CreateForm("Form")),
     db(&Data_base::get_instance())
 {
+    form->mform.insert("Id",Session::getclientId());
     form->mform.insert("Result", "0.0");
     form->mform_edited.insert("Result", false );
     form->mform.insert("Amount", "0.0");
     form->mform_edited.insert("Amount", false );
-    //QObject::connect(form,&Form::form_editedChanged,form,[&](Form *form){form->mform["Result"]="2";});
+
 }
 
 QString Exchange::setresult(const QVariant &converter_input, const QVariant &converter_output)
@@ -41,29 +42,32 @@ void Exchange::exchange(const Currency &inputcurrency, const Currency &outputcur
     double currentAccountBalance;
     QString newAccountBalance;
 
-    // First handling the accountbalance if the account where the money is converted from
-
+    // First handling the accountbalance if of the account the money is converted from
     if(inputcurrency.type=="PLN"){
         currentAccountBalance = db->getclient_data("AccountBalance",Data_base::clients,clientid).toDouble();
         newAccountBalance = QString::number (currentAccountBalance - form->mform["Amount"].toDouble(),'f',2 );
         db->updatedata("AccountBalance",newAccountBalance,Data_base::clients,clientid );
+
     }
     else{
         currentAccountBalance = db->getclient_data("AccountBalance",Data_base::currency_accounts,clientid).toDouble();
         newAccountBalance = QString::number (currentAccountBalance - form->mform["Amount"].toDouble(),'f',2 );
-        db->updatedata("AccountBalance",newAccountBalance,Data_base::currency_accounts,clientid ) ;
+        db->updatedata("AccountBalance",newAccountBalance,Data_base::currency_accounts,"Currency",inputcurrency.type,clientid);
+
     }
 
-    // Then handling the accountbalance if the account where the money is converted to
+    // Then handling the accountbalance of the account the money is converted to
     if(outputcurrency.type=="PLN"){
         currentAccountBalance = db->getclient_data("AccountBalance",Data_base::clients,clientid).toDouble();
         newAccountBalance = QString::number (currentAccountBalance + form->mform["Result"].toDouble(),'f',2 );
         db->updatedata("AccountBalance",newAccountBalance,Data_base::clients,clientid );
+
     }
     else{
         currentAccountBalance = db->getclient_data("AccountBalance",Data_base::currency_accounts,clientid).toDouble();
         newAccountBalance = QString::number (currentAccountBalance + form->mform["Result"].toDouble(),'f',2 );
-        db->updatedata("AccountBalance",newAccountBalance,Data_base::currency_accounts,clientid ) ;
+        db->updatedata("AccountBalance",newAccountBalance,Data_base::currency_accounts,"Currency",outputcurrency.type,clientid);
+
     }
 
 

@@ -55,10 +55,8 @@ Item {
 
             delegate: Rectangle {
                 id: currencyrec
-//                objectName: "dd"+model.index
                 z:2
                 width: currencylist.width
-                //height: root.height/currencys.rowCount(parent)
                 height: root.height/3
                 color: index==0 ? "#acd3e8" :"white" //handle logic later
 
@@ -74,7 +72,6 @@ Item {
                 }
                 onClicked: {
                     currencys.setactivecurrency(index)
-
                 }
 
                 }

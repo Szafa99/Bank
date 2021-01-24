@@ -4,7 +4,7 @@
 #include <QObject>
 #include <headers/database.h>
 #include <headers/formfactory.h>
-
+struct Currency;
 class Exchange:public QObject
 {
     Q_OBJECT
@@ -14,12 +14,14 @@ public:
 public slots:
     QString getheader(){return "Exchange your money";}
    QString setresult(const QVariant &converter_input,const QVariant &converter_output);
+   void exchange(const Currency &inputcurrency, const Currency &outputcurrency);
+
 
    bool validate(const double &accountBalance);
-   void exchange(const Currency &inputcurrency, const Currency &outputcurrency);
 private:
     Form * form=NULL;
     Data_base *db;
+
 private:
 
 };

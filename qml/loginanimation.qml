@@ -23,7 +23,7 @@ Item {
             target: logo
             from:0.5
             to:2
-            running: true
+
             duration: 1000
 
         }

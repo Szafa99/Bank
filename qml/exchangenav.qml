@@ -7,7 +7,7 @@ import Transfer 1.0
 Item{
     anchors.fill: parent
 
-    // here is a transfer object created which contains a form object to control the content of this qmlfile
+
 
 
     Row{
@@ -56,9 +56,12 @@ Item{
             onClicked: {
                 if(formtype.validate(users_currencys.getactivecurrency().amount))
                 {
-                    formtype.exchange(users_currencys.getactivecurrency() , currencys.getactivecurrency())
+                    formtype.exchange( users_currencys.getactivecurrency(),currencys.getactivecurrency())
                     formtype.destroy()
+                    users_currencys.setList();
+                    session.setcurrency(users_currencys.getactivecurrency())
                     mainpage.source="qrc:/qml/mainwindow.qml"
+
                 }
             }
         }

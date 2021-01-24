@@ -7,16 +7,15 @@ Item {
     id:root
     anchors.fill: parent
     z:2
-    property string accountnumber:Form.get_form_cell("AccountNumber")
+
     // ============== MASKS
     Connections{
         target: currencys
         onChoosencurrencyChanged:{
             currencys.hidelist()
             currencys.modelReset()
-            //listsize=currencys.rowCount(currencys.parent)
-            Form.forcedInput(currencys.getcurrencyName(),"Currency")
-            Form.forcedInput(currencys.getcurrencyName() + " " + accountnumber,"AccountNumber" )
+            Form.forcedInput(currencys.getactivecurrency().type,"Currency")
+            Form.form_editedChanged()
         }
     }
 

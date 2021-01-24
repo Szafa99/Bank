@@ -17,10 +17,11 @@ int Currency_list::getactivecurrencyindex() const
 
 
 
-Currency Currency_list::getactivecurrency()
+Currency Currency_list::getactivecurrency()const
 {
     return list.first();
 }
+
 
 
 
@@ -102,6 +103,7 @@ void Currency_list::swapRows(const int &sourceindex, const int &destindex)
 // This method sets a list of currency accounts of the user
 void Currency_list::setList()
 {
+    list.clear();
     QString clientid = Session::getclientId();
     Currency currency;
     Data_base *db=&Data_base::get_instance();
@@ -123,6 +125,7 @@ void Currency_list::setList()
             currency.filePath="../images/"+currency.type+".jpg";
             list.push_back(currency);
          }
+        emit choosencurrencyChanged();
 
 }
 

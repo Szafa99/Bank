@@ -18,6 +18,7 @@ public:
     Q_PROPERTY(int choosencurrency READ getactivecurrencyindex WRITE setactivecurrency NOTIFY choosencurrencyChanged);
 
     Q_INVOKABLE void setallcurrency();
+    Q_INVOKABLE void setList();
 
     enum Roles{
         TYPE, AMOUNT,FILEPATH,CONVERTER
@@ -35,9 +36,7 @@ public slots:
     int getactivecurrencyindex()const;
 
 
-
-
-    Currency getactivecurrency();
+    Currency getactivecurrency()const;
 
 
     bool hidelist();
@@ -49,8 +48,7 @@ private:
     QList<Currency> list;
     int choosenCurrency=-1;
     bool displayonelement=false;
-private:
-    void setList();
+
 };
 
 #endif // CURRENCY_LIST_H

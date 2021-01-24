@@ -11,9 +11,10 @@ Item {
     // ============== MASKS
     Connections{
         target: users_currencys
-        onChoosencurrencyChanged:{
+        function onChoosencurrencyChanged(){
             users_currencys.hidelist()
             users_currencys.modelReset()
+            inputype.text = " " + users_currencys.getactivecurrency().type
             Form.form_editedChanged()
         }
     }

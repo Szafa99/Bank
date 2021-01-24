@@ -36,7 +36,7 @@ Register::Register(QObject *parent):QObject(parent),
 
     form->mform["BirthDay"]="dd-mm-yyyy";
 
-    form->mform["AccountNumber"]= generateAccountnumber();
+    form->mform["AccountNumber"]= Data_base::get_instance().generateAccountnumber();
     form->mform["AccountBalance"]= "100.00";
 
 
@@ -160,17 +160,7 @@ bool Register::validet_input()
 
 }
 
-QString Register::generateAccountnumber()
-{
-    QString accountnumber;
-    QVariant digit;
-    for(int i =0;i<4;i++)
-    {
-    digit =  QRandomGenerator::global()->bounded(1000, 10000);
-    accountnumber+= " " + digit.toString() ;
-    }
-    return  digit.toString();
-}
+
 
 
 

@@ -11,7 +11,7 @@ Item {
 
     Connections{
         target: logintxt
-        onEditingFinished: {
+        function onEditingFinished(){
             if(logintxt.text.length > 1 )
                 loginrect.loginmodified=true
             if(!log.setusername(logintxt.text) )
@@ -23,7 +23,9 @@ Item {
 
     Connections{
         target:log
-        onLoginerrorChanged:{login_error_msg.text=log.getloginerror();console.log("logerror changed")}
+        function onLoginerrorChanged(){
+            login_error_msg.text=log.getloginerror();console.log("logerror changed")
+        }
 
     }
 

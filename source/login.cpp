@@ -69,7 +69,7 @@ bool Login::loguserin(const QString &mpin,const QString &musername)
         startsession->client_id=clientid;
         startsession->settransfers();
         startsession->choosencurrency.amount= startsession->get_data_from_clients_table("AccountBalance");
-        startsession->choosencurrency.type= "PLN";
+        //startsession->choosencurrency.type= "PLN";
         return true;
     }
 
