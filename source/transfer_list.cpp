@@ -3,14 +3,29 @@
 
 
 
+Transfer_list::Transfer_list(QObject *parent):
+    QAbstractListModel(parent){}
+
+QVector<QVariantMap> Transfer_list::client_transfer_data() const
+{
+    return mclient_transfer_data;
+}
+
+void Transfer_list::set_client_transfer_data(QVector<QVariantMap> val)
+{
+    mclient_transfer_data=val;
+};
+
+
+
+
 int Transfer_list::rowCount(const QModelIndex &parent) const
 {
-    // For list models only the root node (an invalid parent) should return the list's size. For all
-    // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
+
     if (parent.isValid())
         return 0;
 
-    // FIXME: Implement me!
+
     else return mclient_transfer_data.size();
 }
 
@@ -26,15 +41,19 @@ QVariant Transfer_list::data(const QModelIndex &index, int role) const
         case transferamount:{
 
               return transfer["TransferAmount"]  ;
-        }
+        }break;
         case transfername:
         {
            return  transfer["Title"];
-        }
-        case Date:
+        }break;
+        case date:
         {
             return transfer["Date"];
-        }
+        }break;
+        case currency:
+        {
+            return transfer["Currency"];
+        }break;
 
     }
     return QVariant();
@@ -42,20 +61,15 @@ QVariant Transfer_list::data(const QModelIndex &index, int role) const
 
 }
 
-bool Transfer_list::insertRows(int row, int count, const QModelIndex &parent)
-{
-    beginInsertRows(parent, row, row + count - 1);
 
-    // FIXME: Implement me!
-    endInsertRows();
-}
 
 
 QHash<int,QByteArray> Transfer_list::roleNames() const{
     QHash<int,QByteArray> roles;
     roles[transfername]="transfername";
     roles[transferamount]="transferamount";
-    roles[Date]="Date";
+    roles[date]="date";
+    roles[currency]="currency";
     return roles;
 }
 

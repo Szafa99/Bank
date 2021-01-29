@@ -1,6 +1,14 @@
 #include "headers/formfactory.h"
 
 
+
+
+FormFactory &FormFactory::getInstance()
+{
+        static FormFactory factory;
+        return factory;
+}
+
 Form * FormFactory::CreateForm(QString qmlObjectName)
 {
         if(!QmlEngine)

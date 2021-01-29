@@ -11,7 +11,7 @@ QString Session::client_id=0;
 Session::Session(QObject *parent) : QObject(parent),
     db(&Data_base::get_instance())
 {
-    choosencurrency.amount=get_data_from_clients_table("AccountBalance");
+
 }
 
 

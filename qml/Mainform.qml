@@ -81,7 +81,7 @@ Column{
     //=============================================================================
     Rectangle {
         height: root.height*0.08
-        width: root.width * 0.4
+        width: root.width * 0.6
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: root.height * 0.01

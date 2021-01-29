@@ -7,7 +7,7 @@ Transfer::Transfer(QObject *parent):QObject(parent),
     form->setmodel(Data_base::dbtables::client_payments);
     form->mform["TransferAmount"]="00,00";
     form->mform["AccountNumber"]="0000 0000 0000 0000";
-
+    form->mform["Currency"];
 }
 
 Transfer::~Transfer()
@@ -15,27 +15,38 @@ Transfer::~Transfer()
     delete form;
 }
 
-bool Transfer::make_transfer()
-{
 
+
+bool Transfer::make_transfer(const Currency &currency)
+{
+        form->mform["Currency"] = currency.type;
         QString sum =form->mform["TransferAmount"].toString();
-        sum.chop(3);
-        bool *ok=new bool;
-        double sum_d=sum.toDouble(ok);
-        if(!*ok){
-            qCritical("Coludn't convert to double");
-            return false;
-        }
-        else
-        {
+        double sum_d=sum.toDouble();
+        double sendersBalance ,reciversBalance;
         QString recieverId = db->getclient_data("id",Data_base::clients,"AccountNumber",form->mform["AccountNumber"].toString());
         QString senderId = Session::getclientId();
-        double sendersBalance = db->getclient_data("AccountBalance",Data_base::clients,senderId).toDouble();
-        double reciversBalance = db->getclient_data("AccountBalance",Data_base::clients,recieverId).toDouble();
+        bool reciever_has_same_account = db->check_if_data_exist(currency.type,"Currency",Data_base::currency_accounts,recieverId);
+    QString reciversNewBalance,sendersNewBalance;
+
+        // Check from which account the money is sent
+        if(currency.type=="PLN")
+        sendersBalance = db->getclient_data("AccountBalance",Data_base::clients,senderId).toDouble();
+        else
+         sendersBalance = db->getclient_data("AccountBalance",Data_base::currency_accounts,"Currency",currency.type,senderId ).toDouble();
+
+        //Check if the reciver owns a currency account of the same currency as the account the money is send from. By default the money will be transfer
+        // to the account of the same currency. Otherwise the money will be transfered to the main account
+        if(reciever_has_same_account)
+             reciversBalance = db->getclient_data("AccountBalance",Data_base::currency_accounts,"Currency",currency.type,recieverId).toDouble();
+        else
+            reciversBalance = db->getclient_data("AccountBalance",Data_base::clients,recieverId).toDouble();
 
 
-        QString reciversNewBalance = QString::number(reciversBalance + sum_d,'f',2);
-        QString sendersNewBalance = QString::number(sendersBalance - sum_d,'f',2);
+        sendersNewBalance = QString::number(sendersBalance - sum_d,'f',2);
+        if(reciever_has_same_account)
+            reciversNewBalance = QString::number(reciversBalance + sum_d,'f',2);
+        else
+           reciversNewBalance = QString::number(reciversBalance + sum_d * currency.converter,'f',2);
 
 
             if(sendersBalance - sum_d<0)
@@ -47,28 +58,45 @@ bool Transfer::make_transfer()
             else
             {   // if data is correct
                 // updating senders and recivers account balance
-                db->updatedata("AccountBalance",reciversNewBalance,Data_base::clients,recieverId);
-                db->updatedata("AccountBalance",sendersNewBalance,Data_base::clients,senderId);
+                if(currency.type=="PLN")
+                    db->updatedata("AccountBalance",sendersNewBalance,Data_base::clients,senderId);
+                else
+                    db->updatedata("AccountBalance",sendersNewBalance,Data_base::currency_accounts,"Currency",currency.type,senderId);
+
+                if(reciever_has_same_account)
+                    db->updatedata("AccountBalance",sendersNewBalance,Data_base::currency_accounts,"Currency",currency.type,recieverId);
+                else
+                    db->updatedata("AccountBalance",reciversNewBalance,Data_base::clients,recieverId);
+
 
                 // adding transfer to senders and recivers transferlist
+
                 QString temp = form->mform["TransferAmount"].toString();
-                temp.chop(3);
+                if(temp[0]=="0" && temp.size()==5)
+                    temp.remove(0,1);
 
                 temp.push_front('-');
                 form->mform["TransferAmount"]=temp;
                 form->mform["Id"]=senderId;
                 db->insert_record(form->mform,Data_base::client_payments);
 
+
                 temp.remove("-");
-                form->mform["TransferAmount"]=temp;
+                form->mform["TransferAmount"]=QString::number( sum_d * currency.converter,'f',2);;
                 form->mform["Id"]=recieverId;
                 form->mform["AccountNumber"]=db->getclient_data("AccountNumber",Data_base::clients,senderId);
-                db->insert_record(form->mform,Data_base::client_payments);
+                if(reciever_has_same_account)
+                    db->insert_record(form->mform,Data_base::client_payments);
+                else
+                {
 
+                    form->mform["Currency"]="PLN";
+                    db->insert_record(form->mform,Data_base::client_payments);
+                }
 
                 return true;
             }
-    }
+
 
 
 
@@ -77,7 +105,8 @@ bool Transfer::make_transfer()
 
 bool Transfer::validateAccountNumber(const QVariant & accountNumber)
 {
-    if(db->check_if_data_exist(accountNumber.toString(),"AccountNumber",Data_base::clients))
+    if(db->check_if_data_exist(accountNumber.toString(),"AccountNumber",Data_base::clients) ||
+            db->check_if_data_exist(accountNumber.toString(),"AccountNumber",Data_base::currency_accounts ) )
         return true;
     else
     {
@@ -90,7 +119,7 @@ bool Transfer::validateAccountNumber(const QVariant & accountNumber)
 bool Transfer::validateTransferAmount(const QVariant & amount)
 {
 
-    if(amount.toString()=="00,00"){
+    if(amount.toDouble()==0.0){
         form->merrorinfo.insert("TransferAmount","Insert the sum you want to transfer");
         emit form->error_infoChanged();
         return false;

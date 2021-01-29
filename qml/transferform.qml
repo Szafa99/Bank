@@ -9,12 +9,19 @@ Item{
     property int form_spacing:form.height/18
     property double input_rec_scale: 1.2
 
+    Connections{
+        target: users_currencys
+        function onChoosencurrencyChanged(){
+            users_currencys.hidelist()
+            users_currencys.modelReset()
+            activecurrency.text = users_currencys.getactivecurrency().type
+            Form.form_editedChanged()
+        }
+    }
 
 
-//    Connections{
-//        target: Form
-//        onError_infoChanged:{errorinfo.text=Form.get_error_info();console.log("errorChanged")}
-//    }
+
+
     Column{
 
         id:form
@@ -92,7 +99,6 @@ Item{
                 objectName: "Title"
                 activeFocusOnTab: true
                 anchors.fill: parent
-                anchors.centerIn: parent
                 text: Form.get_form_cell("Title")
                 font.pixelSize: input_height
                 color: "grey"
@@ -108,6 +114,8 @@ Item{
             }
         }
 
+
+        //
         Rectangle{
             property string bordercolor: "lightgrey"
             width: parent.width
@@ -115,11 +123,13 @@ Item{
             border.color: bordercolor
             border.width: 1
             TextInput{
+                id:amount_input
                 objectName: "TransferAmount"
+                z:110
                 activeFocusOnTab: true
-                anchors.fill: parent
-                anchors.centerIn: parent
-
+                anchors.left: parent.left
+                width: parent.width*0.2
+                height: parent.height
 
                 text: Form.get_form_cell("TransferAmount")
                 color: "grey"
@@ -127,7 +137,7 @@ Item{
 
                 cursorPosition: activeFocus ? 0 : 0
                 inputMethodHints:Qt.ImhDigitsOnly
-                inputMask:"00.00PL\\N\\"
+                inputMask:"00.00"
                 overwriteMode: true
                 onTextChanged: Form.setForm({"TransferAmount":text},Cell_action.Data_changed)
                 onActiveFocusChanged: {
@@ -138,7 +148,34 @@ Item{
                         Form.setForm({"TransferAmount":text},Cell_action.Editing_Finished)
                 }
             }
+
+            Label{
+                id: activecurrency
+                anchors{left:amount_input.right; leftMargin: 5; verticalCenter: parent.verticalCenter }
+                font.pixelSize: input_height
+                z:110
+                text: users_currencys.getactivecurrency().type
+                color:amount_input.activeFocus ? "black" : "grey"
+            }
+
+            Loader{
+
+                id:currencyloader
+                anchors.left: parent.left
+                height: parent.height*list_el_displayed
+                width: parent.width
+                z:100
+                source: "../qml/Currency_exchange_input.qml"
+
+            }
+            MouseArea{
+                id:listcallerarea
+                anchors.fill: parent
+                onClicked: users_currencys.hidelist()
+            }
+
         }
+
 
 
     }

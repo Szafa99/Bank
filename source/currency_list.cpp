@@ -8,6 +8,7 @@ Currency_list::Currency_list(QObject *parent):
 {
 setList();
 
+
 }
 
 int Currency_list::getactivecurrencyindex() const
@@ -25,7 +26,6 @@ Currency Currency_list::getactivecurrency()const
 
 
 
-// call to hide or unhide list
 bool Currency_list::hidelist()
 {
     return displayonelement=!displayonelement;
@@ -33,6 +33,7 @@ bool Currency_list::hidelist()
 
 void Currency_list::setactivecurrency(const int& newcurrency)
 {
+
     if(newcurrency!=0)
         {
         choosenCurrency=newcurrency;
@@ -100,7 +101,7 @@ void Currency_list::swapRows(const int &sourceindex, const int &destindex)
 }
 
 
-// This method sets a list of currency accounts of the user
+
 void Currency_list::setList()
 {
     list.clear();
@@ -127,9 +128,10 @@ void Currency_list::setList()
          }
         emit choosencurrencyChanged();
 
+
 }
 
-// this methods sets a list of alll currencys available in the database
+
 void Currency_list::setallcurrency()
 {
         list.clear();

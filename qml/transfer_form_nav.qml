@@ -54,9 +54,12 @@ Item{
             id:backtologinarea
             anchors.fill: parent
             onClicked: {
-                if(formtype.validet_input() && formtype.make_transfer() )
-                {
-                    session.settransfers();
+                if(formtype.validet_input() && formtype.make_transfer(users_currencys.getactivecurrency()) )
+                {                   
+                    session.settransfers(); // set the uodated new transfer list
+                    users_currencys.setList(); // set the updated currency list
+                    session.setcurrency(users_currencys.getactivecurrency()) // set the active currency
+                    users_currencys.destroy()
                     formtype.destroy()
                     mainpage.source="qrc:/qml/mainwindow.qml"
                 }

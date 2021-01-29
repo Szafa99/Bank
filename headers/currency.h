@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QObject>
 
-
+//! \struct This struct holda data about a currency
 struct Currency{
         Q_GADGET
 public:
@@ -14,15 +14,13 @@ public:
     Q_PROPERTY(QString filePath MEMBER filePath);
     Q_PROPERTY(double converter MEMBER converter);
 
-    void operator= (const Currency& other){
-        converter = other.converter;
-        amount=other.amount;
-        filePath=other.filePath;
-        type=other.type;
-    };
+    //!  Says how mouch PLN's does the currency cost
         double converter;
+    //! Stands for the type of the currency
         QString type;
+    //! Holds the information about the amount to display
         QString amount;
+    //! Holds the path to the image of the currencys flag
         QString filePath;
     };
 

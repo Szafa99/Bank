@@ -43,7 +43,9 @@ Register::Register(QObject *parent):QObject(parent),
 }
 
 
-
+Register::~Register(){
+    delete form;
+}
 
 
 bool Register::register_user()
@@ -142,9 +144,9 @@ bool Register::validet_input()
                 }
 
                    else if(
-                        (i.key().contains("Check") && !check_match(i.value()) ) || //checking if forms that need matches actually match
+                        (i.key().contains("Check") && !check_match(i.key()) ) || //checking if forms that need to matche are the same
                         (i.key()=="Email" && !validate_email(i.value())     )  || // checking email
-                        (i.key()=="Pin" && !validate_pin(i.value())         ) ||//checking pin
+                        (i.key()=="Pin" && !validate_pin(i.value())         ) ||  //checking pin
                         (i.key()=="Password" && !validate_password(i.value()))||//checking if password is valid
                         (i.key()=="BirthDay" && !validate_birthdate(i.value())) //checking birthdate
                         )

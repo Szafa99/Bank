@@ -6,19 +6,11 @@ Login::Login(Session *msession,QObject *parent):
     clientid(""),
     startsession(msession),
     client_db(&Data_base::get_instance() ),
-    pin("2233"),
-    username("martinszafarczyk@gmail.com")
-{
-}
+    pin("1234"),
+    username("Email") {}
 
 
 
-
-Login::~Login()
-{
-   // delete client_db; changed database to Singelton, deleted "delte" method
-
-}
 
 
 bool Login::setpin(const QString &mpin)
@@ -38,6 +30,8 @@ bool Login::setpin(const QString &mpin)
         return false;
     }
 }
+
+
 
 
 bool Login::setusername(const QString &musername){
@@ -62,6 +56,8 @@ bool Login::setusername(const QString &musername){
 }
 
 
+
+
 bool Login::loguserin(const QString &mpin,const QString &musername)
 {
     qDebug()<<"username:"<<musername<<" pin :"<<mpin;
@@ -69,7 +65,8 @@ bool Login::loguserin(const QString &mpin,const QString &musername)
         startsession->client_id=clientid;
         startsession->settransfers();
         startsession->choosencurrency.amount= startsession->get_data_from_clients_table("AccountBalance");
-        //startsession->choosencurrency.type= "PLN";
+        username = "Email";
+        pin = "1234";
         return true;
     }
 
@@ -81,6 +78,28 @@ bool Login::loguserin(const QString &mpin,const QString &musername)
 }
 
 
+
+
+QString Login::getpin() const
+{
+    return pin;
+}
+
+
+
+
+QString Login::getusername() const
+{
+    return username;
+}
+
+
+
+
+QString Login::getloginerror() const
+{
+    return loginerror;
+}
 
 
 

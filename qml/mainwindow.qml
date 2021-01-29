@@ -175,6 +175,9 @@ Item {
                             parent.opacity+=0.3
                         }
                         onClicked: {
+                            users_currencys = Qt.createQmlObject('import Currency_list 1.0;Currency_list{id:list;}',mainpage,"Currency_exchange_input.qml")
+                            users_currencys.hidelist()
+                            users_currencys.modelReset()
 
                             formtype = Qt.createQmlObject('import QtQuick 2.12;import Transfer 1.0; Transfer{id:transfer;}',
                                                           mainpage,"mainform.qml")
@@ -321,11 +324,11 @@ Item {
             Text {
                 id:amount
                 color: model.transferamount[0]==="-" && model.transferamount !== ""  ? "red" : "green"
-                text: model.transferamount !== "" ? model.transferamount + "PLN" : "Make your first transfer"
+                text: model.transferamount !== "" ? model.transferamount + " "+ model.currency : "Make your first transfer"
                 anchors.verticalCenter: parent.verticalCenter
             }
             Text {
-                anchors.left:   amount.right
+                anchors.left: amount.right
                 anchors.leftMargin: 10
 
                 text:  model.transfername !== "" ? "Titile: " + model.transfername : ""
@@ -333,7 +336,7 @@ Item {
                 font.bold: true
             }
             Text {
-                text: model.Date !== "" ? "Date: " + model.Date : ""
+                text: model.date !== "" ? "Date: " + model.date : ""
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 font.bold: true

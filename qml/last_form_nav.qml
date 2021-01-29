@@ -2,17 +2,19 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.3
 
 Item{
-    anchors.fill: parent
 
+    anchors.fill: parent
+    anchors.horizontalCenter: parent.horizontalCenter
+    property int buttonwidth: width/3
     Row{
         id: last_page
         anchors.fill: parent
-        anchors.centerIn: parent
-        spacing: 2
+        anchors.horizontalCenter: parent.horizontalCenter
+        spacing: 5
 
         Rectangle{
             height: parent.height
-            width: parent.width*0.4
+            width: buttonwidth
             color: backmousearea.pressed ? "darkred" : "red"
             radius:10
             Text{
@@ -35,14 +37,14 @@ Item{
         }
         Rectangle{
             height: parent.height
-            width: parent.width*0.4
+            width: buttonwidth
             color: backloginmousearea.pressed ? "darkred" : "red"
             radius:10
             Text{
                fontSizeMode:Text.HorizontalFit
                 anchors.centerIn: parent
                 color:"white"
-                text: "Log in"
+                text: "Back to login"
             }
 
             MouseArea
@@ -57,7 +59,7 @@ Item{
 
         Rectangle{
             height: parent.height
-            width: parent.width*0.4
+            width: buttonwidth
             color: registermousearea.pressed ? "darkred" : "red"
             radius:10
             Text{

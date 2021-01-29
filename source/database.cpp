@@ -8,7 +8,6 @@ Data_base::Data_base(QString hostname,QString Username,QString Password,QString 
     db_Name(dbName),
     db_Engine(sqlengine)
 {
-
     clientdb=QSqlDatabase::addDatabase(sqlengine);
     clientdb.setHostName(hostname);
     clientdb.setDatabaseName(dbName);
@@ -21,10 +20,21 @@ Data_base::Data_base(QString hostname,QString Username,QString Password,QString 
 
 
 
+Data_base &Data_base::get_instance()
+{
+    static Data_base instance("localhost","root","","bank_clients","QMYSQL");
+    return instance;
+}
+
+
+
+
 Data_base::~Data_base()
 {
     clientdb.close();
     qDebug()<<"closing database";
+
+
 }
 
 
@@ -84,11 +94,7 @@ bool Data_base::validet_user(const QString &username, const QString &pin, QStrin
     return false;
 }
 
-Data_base &Data_base::get_instance()
-{
-    static Data_base instance("localhost","root","","bank_clients","QMYSQL");
-    return instance;
-}
+
 
 
 
@@ -180,7 +186,7 @@ QString Data_base::getclient_data(const QString &data, dbtables table, const QSt
 QString Data_base::getclient_data(const QString &data, Data_base::dbtables table, const QString &formname, const QString &formdata, const QString &clientid) const
 {
     QSqlQuery myquery;
-       myquery.prepare( "SELECT " + data + " FROM " + tableNames(table) + " WHERE " + formname + " = " + formdata + " && id = " + clientid );
+       myquery.prepare( "SELECT `" + data + "` FROM `" + tableNames(table) + "` WHERE `" + formname + "` = '" + formdata + "' && `id` = '" + clientid + "'"  );
 
 
     if(myquery.exec())

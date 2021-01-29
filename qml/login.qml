@@ -138,7 +138,7 @@ Item {
             Text {
                 anchors.centerIn: parent
                 id: welcometxt
-                text: qsTr("Welcome to NazwaBanku")
+                text: qsTr("Welcome to BankName")
                 color:"black"
                 width:text.width
                 height: text.height
@@ -188,9 +188,11 @@ Item {
                 TextInput{
                     id:logintxt
 
-                    height: parent.height
-                    font.pixelSize: height*0.5
-                    anchors.bottom: parent.bottom
+
+                    height: parent.height*0.5
+                    font.pixelSize: height
+
+                    anchors{ centerIn: parent;}
 
                     color:"darkgrey"
 
@@ -325,7 +327,8 @@ Item {
                     anchors.fill: parent
                     onClicked: {
                         if(log.loguserin(pin.text,log.getusername()) ){
-                            console.log("logged in")
+                            currencys = Qt.createQmlObject('import Currency_list 1.0;Currency_list{id:list;}',mainpage,"allcurrencys.qml")
+                            session.setcurrency(currencys.getactivecurrency())
                             mainpage.source="qrc:/qml/loginanimation.qml"
                         }
                     }
@@ -342,7 +345,7 @@ Item {
             width: login_button.width
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: user_interface_rec.bottom
-            anchors.topMargin: login_button.anchors.bottomMargin
+            anchors.topMargin: height*0.1
             color: register_area.pressed ? "darkred" : "red"
             radius:10
             Text{

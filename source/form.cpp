@@ -1,9 +1,22 @@
 #include "headers/form.h"
+
+
+
+Form::Form(QObject *parent, QObject *qmlengine):QObject(parent),
+    registergui(qmlengine)
+{};
+
+
+
+
 void Form::forcedInput(const QVariant &value, const QString &key)
 {
     mform[key]=value.toString();
     emit formChanged();
 }
+
+
+
 
 void Form::setForm(const QVariantMap &formcell,Action_on_cell action)
 {

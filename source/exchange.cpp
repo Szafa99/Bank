@@ -13,6 +13,11 @@ Exchange::Exchange(QObject *parent) : QObject(parent),
 
 }
 
+QString Exchange::getheader() const
+{
+    return "Exchange your money";
+}
+
 QString Exchange::setresult(const QVariant &converter_input, const QVariant &converter_output)
 {
 

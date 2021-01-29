@@ -11,6 +11,11 @@ CurrencyAccountForm::CurrencyAccountForm(QObject *parent) : QObject(parent),
     form->mform["AccountNumber"]= "PLN" + db->generateAccountnumber();
 }
 
+CurrencyAccountForm::~CurrencyAccountForm()
+{
+    delete form;
+}
+
 
 
 
@@ -20,9 +25,14 @@ bool CurrencyAccountForm::validateInput()
         {
             form->merrorinfo.insert("AccountNumber","You have to choose a currency");
             emit form->error_infoChanged();
-            return false;
         }
-        return true;
+    if( db->check_if_data_exist(form->mform["Currency"].toString(),"Currency",Data_base::currency_accounts,Session::getclientId()) )
+        {
+            form->merrorinfo.insert("AccountNumber","You have already an account of this currency");
+            emit form->error_infoChanged();
+        }
+
+    return form->merrorinfo.empty();
 }
 
 
