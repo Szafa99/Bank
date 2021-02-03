@@ -1,5 +1,5 @@
 # Bank
-A bank app developed for an academical project using QT quick
+A bank app developed as an academical project using QT quick
 
 # INSTALATION
 If you've Qt installed on your machine simply pull the project and you should be ready to go
