@@ -1,7 +1,7 @@
 # Bank
 A bank app developed as an academical project using QT quick
 
-# INSTALATION
-If you've Qt installed on your machine simply pull the project and you should be ready to go
+# App demo
+
 
 ![](https://github.com/Szafa99/Bank/blob/master/images/Bank.gif)
