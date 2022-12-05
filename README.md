@@ -1,5 +1,5 @@
 # Bank
-A bank app developed as an academical project using QT quick
+A bank app using QT quick
 
 # App demo
 
